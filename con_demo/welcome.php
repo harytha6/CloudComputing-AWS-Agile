@@ -26,7 +26,7 @@ if (isset($_POST["submit"])) {
             $result = mysqli_query($conn, $sql);
             if ($result) {
                 echo "<script>alert('Profile Updated successfully.');</script>";
-                move_uploaded_file($photo_tmp_name, "uploads/" . $photo_new_name);
+               // move_uploaded_file($photo_tmp_name, "uploads/" . $photo_new_name);
             } else {
                 echo "<script>alert('Profile can not Updated.');</script>";
                 echo  $conn->error;

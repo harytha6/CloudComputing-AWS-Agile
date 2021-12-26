@@ -70,7 +70,7 @@ if (isset($_POST["signin"])) {
   $email = mysqli_real_escape_string($conn, $_POST["email"]);
   $password = mysqli_real_escape_string($conn, md5($_POST["password"]));
 
-  $check_email = mysqli_query($conn, "SELECT id FROM users WHERE email='$email' AND password='$password' AND status='1'");
+  $check_email = mysqli_query($conn, "SELECT id FROM users WHERE email='$email' AND password='$password'");
 
   if (mysqli_num_rows($check_email) > 0) {
     $row = mysqli_fetch_assoc($check_email);
@@ -138,7 +138,7 @@ if (isset($_POST["signin"])) {
         <div class="content">
           <h3>New here ?</h3>
           <p>
-          Consumer Registration form
+            Consumer Registration form
           </p>
           <button class="btn transparent" id="sign-up-btn">
             Sign up
@@ -150,7 +150,7 @@ if (isset($_POST["signin"])) {
         <div class="content">
           <h3>One of us ?</h3>
           <p>
-          Please sign in
+            Please sign in
           </p>
           <button class="btn transparent" id="sign-in-btn">
             Sign in

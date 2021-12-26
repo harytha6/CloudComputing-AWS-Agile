@@ -28,13 +28,14 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `full_name` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
   `status` int(11) NOT NULL,
-  `photo` varchar(255) NOT NULL
+  `photo` varchar(255) NOT NULL,
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -42,7 +43,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `token`, `status`, `photo`) VALUES
-(2, 'Musab developer', 'musabwebdev@gmail.com', 'bedebb62a1716ada5fa7203f46c02723', '0cb5e63a18e45aadc68a9e894d88618d', 1, '907182248Screenshot 2021-05-17 115128.png');
+(2, 'Mandar', 'mandarhate6897@gmail.com', 'bedebb62a1716ada5fa7203f46c02723', '0cb5e63a18e45aadc68a9e894d88618d', 1, '907182248Screenshot 2021-05-17 115128.png');
 
 --
 -- Indexes for dumped tables
