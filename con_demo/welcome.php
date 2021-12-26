@@ -84,6 +84,7 @@ if (isset($_POST["submit"])) {
             <div>
                 <button type="submit" name="submit" class="btn">Update Profile</button>
             </div>
+            <a href="logout.php?logout=true" class="logout-link">Logout</a>
         </form>
     </div>
 </body>
