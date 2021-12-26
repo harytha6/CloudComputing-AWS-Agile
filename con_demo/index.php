@@ -33,7 +33,7 @@ if (isset($_POST["signup"])) {
       $_POST["signup_cpassword"] = "";
 
       $to = $email;
-      $subject = "Email verification - Pure Coding YouTube";
+      $subject = "Email verification";
 
       $message = "
       <html>
@@ -90,7 +90,7 @@ if (isset($_POST["signin"])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
-  <title>Sign in & Sign up Form - Pure Coding</title>
+  <title>Sign in & Sign up Form </title>
 </head>
 
 <body>
