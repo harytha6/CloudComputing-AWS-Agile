@@ -1,3 +1,36 @@
+<?php
+include 'config.php';
+
+session_start();
+
+error_reporting(0);
+
+if (isset($_POST["submit"])) {
+
+  $role = mysqli_real_escape_string($conn, $_POST["projectRole"]);
+  $skilllevel = mysqli_real_escape_string($conn, $_POST["skilllevel"]);
+  $location = mysqli_real_escape_string($conn, $_POST["location"]);
+  $skillset = mysqli_real_escape_string($conn, $_POST["skillset"]);
+  $duration = mysqli_real_escape_string($conn, $_POST["period"]);
+  $projectname = mysqli_real_escape_string($conn, $_POST["projectName"]);
+  $taskdescription = mysqli_real_escape_string($conn, $_POST["taskdescription"]);
+  $weight = mysqli_real_escape_string($conn, $_POST["function"]);
+  $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
+
+
+    $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight')";
+   // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
+$result = mysqli_query($conn, $sql);
+$check = mysqli_query($conn, "SELECT id FROM service_requests WHERE id>='1002' ");
+
+if (mysqli_num_rows($check)>0) {
+    echo "<script>alert('Request submitted successfully');</script>";
+  } else {
+    echo "<script>alert('Submission failed');</script>";
+  }
+};
+
+?>
   
 <!DOCTYPE html>
 <html lang="en">
@@ -201,67 +234,67 @@
             <button class="btn btn-dark js-request-form-close btn-desktop">Close</button>
             <button class="btn-sm btn-dark js-request-form-close btn-mobile">Close</button>
         </div>
-        <form class="form-container js-form-container">
+        <form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
                 <div class="mb-3 row">
                     <label for="projectName" class="col-sm-2 col-form-label">Project Name:</label>
                     <div class="col-sm-10">
-                        <input id="projectName" class="form-control" type="text" placeholder="Project Name" />
+                        <input id="projectName" name="projectName" class="form-control" type="text" placeholder="Project Name" value="<?php echo $_POST["projectName"]; ?>" required />
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="projectRole" class="col-sm-2 col-form-label">Project Role:</label>
                     <div class="col-sm-10">
-                        <input id="projectRole" class="form-control" type="text" placeholder="Project Role" />
+                        <input id="projectRole" name="projectRole" class="form-control" type="text" placeholder="Project Role" value="<?php echo $_POST["projectRole"]; ?>" />
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="location" class="col-sm-2 col-form-label">Location:</label>
                     <div class="col-sm-10"> 
-                        <input id="location" class="form-control" type="text" placeholder="Location of the role" />
+                        <input id="location" name="location" class="form-control" type="text" placeholder="Location of the role" value="<?php echo $_POST["location"]; ?>" />
                     </div>
                 </div>
 	        <div class="mb-3 row">
                     <label for="skilllevel" class="col-sm-2 col-form-label">Level of Expertise:</label>
                     <div class="col-sm-10"> 
-                        <input id="skilllevel" class="form-control" type="text" placeholder="1/2/3" />
+                        <input id="skilllevel" name="skilllevel" class="form-control" type="text" placeholder="1/2/3" value="<?php echo $_POST["skilllevel"]; ?>" />
                     </div>
 		</div>
 		<div class="mb-3 row">
                     <label for="skillset" class="col-sm-2 col-form-label">Skill Set</label>
                     <div class="col-sm-10">
-                        <input id="skillset" class="form-control" type="text" placeholder="Programming languages known, Project methodologies,.." />
+                        <input id="skillset" name="skillset" class="form-control" type="text" placeholder="Programming languages known, Project methodologies,.." value="<?php echo $_POST["skillset"]; ?>" />
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="period" class="col-sm-2 col-form-label">Time Period:</label>
                     <div class="col-sm-10">
-                        <input id="period" class="form-control" type="text" placeholder="Duration of the role" />
+                        <input id="period" name="period" class="form-control" type="text" placeholder="Duration of the role" value="<?php echo $_POST["period"]; ?>" />
                     </div>
                 </div>
 		<div class="mb-3 row">
                     <label for="function" class="col-sm-2 col-form-label">Commercial/Functional weight:</label>
                     <div class="col-sm-10">
-                        <input id="function" class="form-control" type="text" placeholder="Enter percentages" />
+                        <input id="function" name="function" class="form-control" type="text" placeholder="Enter percentages" value="<?php echo $_POST["function"]; ?>" />
                     </div>
                 </div>
 	        <div class="mb-3 row">
                     <label for="taskdescription" class="col-sm-2 col-form-label">Detailed Task Description:</label>
                     <div class="col-sm-10">
-                        <textarea id="taskdescription" class="form-control" type="text" placeholder="Enter more detailed information" rows="3"></textarea>
+                        <textarea id="taskdescription" name="taskdescription" class="form-control" type="text" placeholder="Enter more detailed information" rows="3" value="<?php echo $_POST["taskdescription"]; ?>" ></textarea>
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="comments" class="col-sm-2 col-form-label">Comments:</label>
                     <div class="col-sm-10">
-                        <textarea id="comments" class="form-control" type="text" placeholder="Comments" rows="3"></textarea>
+                        <textarea id="comments" name="comments" class="form-control" type="text" placeholder="Comments" rows="3" value="<?php echo $_POST["comments"]; ?>" ></textarea>
                     </div>
                 </div>
                 <div class="form-input-actions">                
                     <div id="actionButtons">
                         <button class="btn btn-secondary js-reset-service-form">Reset</button>
-                        <button class="btn btn-primary">Submit</button>
+                        <input type="submit" class="btn" name="submit" value="Submit Req" />
                     </div>
                 </div>
             </div>
