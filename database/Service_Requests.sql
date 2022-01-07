@@ -83,3 +83,4 @@ ALTER TABLE `service_requests` ADD `Submission_status` INT(3) NULL DEFAULT NULL 
 ALTER TABLE `service_requests` ADD `comments` VARCHAR(2000) NOT NULL AFTER `taskdescription`;
 
 ALTER TABLE `service_requests` ADD `status` VARCHAR(100);
+

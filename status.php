@@ -20,22 +20,24 @@
   <tbody>
     <?php
 
-    $hostname = "localhost";
-    $username = "root";
-    $password = "";
-    $database = "Request";
+    include 'config.php'
 
-    $conn = mysqli_connect($hostname, $username, $password, $database) or die("Database connection failed");
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    //$hostname = "localhost";
+    //$username = "root";
+    //$password = "";
+    //$database = "Request";
 
-    $sql = "SELECT * FROM Rstatus WHERE Username = 'Haritha'";
+    //$conn = mysqli_connect($hostname, $username, $password, $database) or die("Database connection failed");
+    //if ($conn->connect_error) {
+   //     die("Connection failed: " . $conn->connect_error);
+   // }
+
+    $sql = "SELECT * FROM Service_Requests WHERE id = 1000";
     $result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
         while ($row = $result-> fetch_assoc()) {
-            echo "<tr><td>" . $row["Username"] . "</td><td>" . $row["Project Name"] . "</td><td>" . $row["Project Role"] . "</td><td>" . $row["Status"] . "</td></tr>";
+            echo "<tr><td>" . $row["id"] . "</td><td>" . $row["projectname"] . "</td><td>" . $row["role"] . "</td><td>" . $row["status"] . "</td></tr>";
         }
         echo "</table>";
     }
