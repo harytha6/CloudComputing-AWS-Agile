@@ -82,9 +82,4 @@ ALTER TABLE `service_requests` ADD `Submission_status` INT(3) NULL DEFAULT NULL 
 
 ALTER TABLE `service_requests` ADD `comments` VARCHAR(2000) NOT NULL AFTER `taskdescription`;
 
-<<<<<<< HEAD
-ALTER TABLE `service_requests` ADD `status` VARCHAR(100);
-
-=======
 ALTER TABLE `service_requests` ADD `status` VARCHAR(100) NOT NULL;
->>>>>>> 089175c36671e6fddf0426ecc2d5769730f50e6f
