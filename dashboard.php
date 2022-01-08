@@ -38,7 +38,7 @@ if (mysqli_num_rows($check)>0) {
 <head>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous"> 
-  
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -150,6 +150,30 @@ if (mysqli_num_rows($check)>0) {
                 display: block;
             }
         }
+
+        .req_service_wrapper{
+            margin-top:20px;
+        }
+
+        .req_service_table{
+            width:100%;
+        }
+
+        .req_service_head{
+            border-bottom: 1px solid #ccc!important;
+        }
+
+        .req_service_head th{
+            padding-bottom:20px;
+        }
+
+        .req_service_body{
+            border-bottom: 1px solid #ccc!important;
+        }
+
+        .req_service_body td{
+            padding:20px 0 20px 0;
+        }
     </style>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -195,7 +219,7 @@ if (mysqli_num_rows($check)>0) {
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="req_service.php">
+                          <a class="nav-link" href="javascript:OpenReSer();">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
                             <span class="ml-2">Requested Services</span>
                           </a>
@@ -301,9 +325,46 @@ if (mysqli_num_rows($check)>0) {
             </div>
         </form>
     </div>
+
+    <!-- Requested Services -->
+    <div class="request-form-wrapper req_ser form-hide">
+        <div class="form-head">
+            <h1 class="display-6 form__title">Requested Service</h1>
+            <button class="btn btn-dark js-request-form-close btn-desktop" onclick="closeReqServ()">Close</button>
+            <button class="btn-sm btn-dark req_ser_close js-request-form-close btn-mobile">Close</button>
+        </div>
+        <div class="req_service_wrapper">
+            <table class="req_service_table">
+                <tr class="req_service_head">
+                    <th style="width: 50px;">No.</th>
+                    <th>Project Name</th>
+                    <th>Project Role</th>
+                    <th>Location</th>
+                    <th>Level of Expertise</th>
+                    <th>Skill Set</th>
+                    <th>Time Period</th>
+                    <th>Commercial/Functional weight</th>
+                    <th>Detailed Task Description</th>
+                    <th>Comments</th>
+                </tr>
+                <tr class="req_service_body">
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                </tr>
+            </table>
+        </div>
+    </div>
     
     <script>
-        var requestForm, requestFormOpen, requestFormClose, requestFormClasses, resetFormButton;
+        var requestForm, requestFormOpen, requestFormClose, requestFormClasses, resetFormButton, reqServices, reqServiceClose;
 
         function _init() {
             requestForm = document.querySelector('.js-request-form-wrapper');
@@ -312,6 +373,9 @@ if (mysqli_num_rows($check)>0) {
             requestFormClasses = requestForm.classList;
             resetFormButton = requestForm.querySelector('.js-reset-service-form');
             requestFormFields = requestForm.querySelectorAll('.js-form-container input');
+
+            reqServices = document.querySelector('.req_ser').classList;
+            reqServiceClose = document.querySelector('.req_ser_close').classList;
         }
 
         // Method to open service request form.
@@ -330,6 +394,14 @@ if (mysqli_num_rows($check)>0) {
                     });
                 });
             }
+        }
+
+        function OpenReSer(){
+            reqServices.remove('form-hide');
+        }
+
+        function closeReqServ(){
+            reqServices.add('form-hide');
         }
 
         // Function to reset input fields
