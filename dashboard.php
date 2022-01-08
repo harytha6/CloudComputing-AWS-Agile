@@ -16,9 +16,10 @@ if (isset($_POST["submit"])) {
   $taskdescription = mysqli_real_escape_string($conn, $_POST["taskdescription"]);
   $weight = mysqli_real_escape_string($conn, $_POST["function"]);
   $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
+  $createdbyuserid = $_SESSION["user_id"];
 
 
-    $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments')";
+    $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1')";
    // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
 $result = mysqli_query($conn, $sql);
 $check = mysqli_query($conn, "SELECT id FROM service_requests WHERE id>='1002' ");
