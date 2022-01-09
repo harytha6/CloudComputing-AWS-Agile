@@ -335,6 +335,7 @@ if (mysqli_num_rows($check)>0) {
         </div>
         <div class="req_service_wrapper">
             <table class="req_service_table">
+                <!--
                 <tr class="req_service_head">
                     <th style="width: 50px;">No.</th>
                     <th>Project Name</th>
@@ -347,17 +348,62 @@ if (mysqli_num_rows($check)>0) {
                     <th>Detailed Task Description</th>
                     <th>Comments</th>
                 </tr>
+                -->
+
                 <tr class="req_service_body">
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
+                <?php
+                $sql = "SELECT * FROM service_requests";
+                
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+
+                    echo '<table border="0" cellspacing="2" cellpadding="20">
+                    <tr class="req_service_head">
+                        <th style="width: 50px;">No.</th>
+                        <th>Project Name</th>
+                        <th>Project Role</th>
+                        <th>Location</th>
+                        <th>Level of Expertise</th>
+                        <th>Skill Set</th>
+                        <th>Time Period</th>
+                        <th>Commercial/Functional weight</th>
+                        <th>Detailed Task Description</th>
+                        <th>Comments</th>
+                    </tr>';
+
+                    while($row = $result->fetch_assoc()) {
+                        $field0 = 1;
+                        $field1 = $row["projectname"];
+                        $field2 = $row["role"];
+                        $field3 = $row["location"];
+                        $field4 = $row["skilllevel"];
+                        $field5 = $row["skillset"];
+                        $field6 = $row["duration"];
+                        $field7 = $row["weight"];
+                        $field8 = $row["taskdescription"];
+
+                        echo '<tr>
+                                <td>'.$field0.'</td>
+                                <td>'.$field1.'</td> 
+                                <td>'.$field2.'</td> 
+                                <td>'.$field3.'</td> 
+                                <td>'.$field4.'</td> 
+                                <td>'.$field5.'</td> 
+                                <td>'.$field6.'</td> 
+                                <td>'.$field7.'</td> 
+                                <td>'.$field8.'</td> 
+                            </tr>';
+                                
+                                "<br>";
+                    }
+
+                    $result->free();
+                }
+                else{
+                    echo "0 results";
+                }
+                ?>
                 </tr>
             </table>
         </div>
