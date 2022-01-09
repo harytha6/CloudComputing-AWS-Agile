@@ -71,7 +71,6 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 
------------------------------------------------------------------------------------------------------------------------
 ALTER TABLE `service_requests` ADD `Created_by_userid` INT(11) NOT NULL AFTER `id`;
 
 ALTER TABLE `service_requests` ADD `is_open_for_bidding` INT(2) NOT NULL AFTER `Created_by_userid`, ADD `cycle` INT(2) NOT NULL DEFAULT '1' AFTER `is_open_for_bidding`;
