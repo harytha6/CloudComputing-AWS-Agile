@@ -5,6 +5,17 @@ session_start();
 
 error_reporting(0);
 
+$mapid = mysqli_real_escape_string($conn,$_SESSION["map_id"]);
+
+$load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
+
+  if (mysqli_num_rows($load) > 0) {
+	$row = mysqli_fetch_assoc($load);
+    	$mapname = $row['full_name'];
+  } else {
+    echo "<script>alert('Loading profile details not complete.');</script>";
+  }
+
 /*if (isset($_POST["submit"])) {
 
   $role = mysqli_real_escape_string($conn, $_POST["projectRole"]);
@@ -41,7 +52,7 @@ if (mysqli_num_rows($check)>0) {
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consumer Portal</title>
+    <title>MAP Portal</title>
     <!-- insert stylesheets here -->
 
     <style>
@@ -179,7 +190,8 @@ if (mysqli_num_rows($check)>0) {
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
 
-<body>
+<body>	
+
     <nav class="navbar navbar-light bg-light p-3">
   <div class="d-flex col-12 col-md-3 col-lg-2 mb-2 mb-lg-0 flex-wrap flex-md-nowrap justify-content-between">
       <a class="navbar-brand" href="#">
@@ -196,7 +208,7 @@ if (mysqli_num_rows($check)>0) {
 
       <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
-            Hello, MAP
+            Hello, <?php echo $mapname ?>
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li><a class="dropdown-item" href="#">Settings</a></li>
@@ -245,8 +257,8 @@ if (mysqli_num_rows($check)>0) {
                         <li class="breadcrumb-item active" aria-current="page">Overview</li>
                     </ol>
                 </nav>
-                <h1 class="h2">Dashboard</h1>
-                <p>This is the homepage of MAP</p>
+                 <h1 class="h2">Dashboard</h1>
+		 <p> This is the homepage of <?php echo $mapname ?> </p> 
             </main>
         </div>
     </div>

@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\database"
   ],
-  "SelectedNode": "\\dashboard.php",
+  "SelectedNode": "\\database\\Service_Requests.sql",
   "PreviewInSolutionExplorer": false
 }

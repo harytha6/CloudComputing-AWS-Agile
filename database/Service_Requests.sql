@@ -82,3 +82,18 @@ ALTER TABLE `service_requests` ADD `Submission_status` INT(3) NULL DEFAULT NULL 
 ALTER TABLE `service_requests` ADD `comments` VARCHAR(2000) NOT NULL AFTER `taskdescription`;
 
 ALTER TABLE `service_requests` ADD `status` VARCHAR(100) NOT NULL;
+
+ALTER TABLE `service_requests` ADD `globalid` INT(10) NOT NULL AFTER `id`;
+
+UPDATE `service_requests` SET `globalid` = '8879899', `created_at` = NULL WHERE `service_requests`.`id` = 1000;
+
+UPDATE `service_requests` SET `globalid` = '563434', `created_at` = NULL WHERE `service_requests`.`id` = 1001;
+
+UPDATE `service_requests` SET `globalid` = '138986', `created_at` = NULL WHERE `service_requests`.`id` = 1002;
+
+UPDATE `service_requests` SET `globalid` = '534239' WHERE `service_requests`.`id` = 1003;
+
+
+
+
+
