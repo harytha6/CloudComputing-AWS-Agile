@@ -360,7 +360,6 @@ if (mysqli_num_rows($check)>0) {
 
                     echo '<table border="0" cellspacing="2" cellpadding="20">
                     <tr class="req_service_head">
-                        <th style="width: 50px;">No.</th>
                         <th>Project Name</th>
                         <th>Project Role</th>
                         <th>Location</th>
@@ -369,11 +368,11 @@ if (mysqli_num_rows($check)>0) {
                         <th>Time Period</th>
                         <th>Commercial/Functional weight</th>
                         <th>Detailed Task Description</th>
-                        <th>Comments</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>';
 
                     while($row = $result->fetch_assoc()) {
-                        $field0 = 1;
                         $field1 = $row["projectname"];
                         $field2 = $row["role"];
                         $field3 = $row["location"];
@@ -382,9 +381,31 @@ if (mysqli_num_rows($check)>0) {
                         $field6 = $row["duration"];
                         $field7 = $row["weight"];
                         $field8 = $row["taskdescription"];
+                        
+                        
+
+                        switch($row["status"]) {
+                            case 0:
+                                $field9 = "in Creation";
+                                break;
+                            case 1:
+                                $field9 = "For Requested/Submitted";
+                                break;
+                            case 2:
+                                $field9 = "Profile Uploaded";
+                                break;
+                            case 3:
+                                $field9 = "Appointed";
+                                break;
+                            case 4:
+                                $field9 = "Evaluated";
+                                break;
+                            case 5:
+                                $field9 = "Canceled";
+                                break;
+                        }
 
                         echo '<tr>
-                                <td>'.$field0.'</td>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -393,6 +414,8 @@ if (mysqli_num_rows($check)>0) {
                                 <td>'.$field6.'</td> 
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
+                                <td>'.$field9.'</td> 
+                                <td> <button class="btn_upload_profile" >Upload Profile</button> </td>
                             </tr>';
                                 
                                 "<br>";
