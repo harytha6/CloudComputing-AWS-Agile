@@ -52,7 +52,7 @@ if (isset($_POST["accept"])) {
   </head>
 <body>
 
-<h1>User Profiles</h1>
+<h1>Saved Service Requests</h1>
 
 <table class="content-table">
   <thead>
@@ -114,13 +114,13 @@ if (isset($_POST["accept"])) {
   </tbody>
 </table>
 
-<h1>Select Profiles</h1>
+<h1>Select the saved service request</h1>
 	
 	<form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
                 <div class="mb-3 row">
-                    <label for="profileid" class="col-sm-2 col-form-label">Profile ID:</label>
+                    <label for="profileid" class="col-sm-2 col-form-label">Global ID:</label>
                     <div class="col-sm-10">
                         <input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter the GlobalID of draft to submit" value="<?php echo $_POST["profileid"]; ?>" required />
                     </div>
