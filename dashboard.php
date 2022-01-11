@@ -34,7 +34,7 @@ if (isset($_POST["submit"])) {
     $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1','$username','$globalid')";
    // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
 $result = mysqli_query($conn, $sql);
-$check = mysqli_query($conn, "SELECT id FROM service_requests WHERE id>='1002' ");
+$check = mysqli_query($conn, "SELECT id FROM service_requests WHERE globalid ='$globalid' AND Submission_status = '1' ");
 
 if (mysqli_num_rows($check)>0) {
     echo "<script>alert('Request submitted successfully');</script>";
@@ -343,7 +343,7 @@ if (mysqli_num_rows($check)>0) {
                 <div class="form-input-actions">                
                     <div id="actionButtons">
                         <button class="btn btn-secondary js-reset-service-form">Reset</button>
-                        <input type="submit" class="btn" name="submit" value="Submit Req" />
+                        <input type="submit" class="btn" name="submit" value="Submit" />
                         <button class="btn btn-dark js-request-form-close btn-desktop" onclick="save.php">Save</button>
                     </div>
                 </div>
