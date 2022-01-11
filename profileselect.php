@@ -31,10 +31,10 @@ if (isset($_POST["accept"])) {
     		echo "<script>alert('No Application number found ');</script>";
   	}
 
-	$sql = "UPDATE `service_requests` SET `Submission_status` = '2' WHERE globalid = '$globalid' ";
+	$sql = "UPDATE `service_requests` SET `Submission_status` = '3' WHERE globalid = '$globalid' ";
 	$result = mysqli_query($conn, $sql);
 
-	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '2' ");
+	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '3' ");
 	if (mysqli_num_rows($verify)>0) {
    		 echo "<script>alert('Profile selected');</script>";
   	} else {
