@@ -33,5 +33,9 @@ ALTER TABLE `mapservice` MODIFY `mapid` int(11) NOT NULL AUTO_INCREMENT, AUTO_IN
 
 ALTER TABLE `mapservice` CHANGE `mapid` `profileid` INT(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `mapservice` ADD `negotiateprice` INT(10) NOT NULL AFTER `price`;
+
+ALTER TABLE `mapservice` ADD `employeeid` INT(10) NOT NULL AFTER `profileid`;
+
 
 

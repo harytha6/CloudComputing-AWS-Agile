@@ -97,7 +97,6 @@ ALTER TABLE `service_requests` ADD `created_by` VARCHAR(255) NOT NULL AFTER `cre
 
 UPDATE `service_requests` SET `created_by` = 'Testy Test' WHERE `service_requests`.`id` = 1003;
 
-
-
+UPDATE `service_requests` SET `globalid` = '8080' WHERE `service_requests`.`id` = 1004;
 
 
