@@ -344,6 +344,7 @@ if (mysqli_num_rows($check)>0) {
                     <div id="actionButtons">
                         <button class="btn btn-secondary js-reset-service-form">Reset</button>
                         <input type="submit" class="btn" name="submit" value="Submit Req" />
+                        <button class="btn btn-dark js-request-form-close btn-desktop" onclick="save.php">Save</button>
                     </div>
                 </div>
             </div>
