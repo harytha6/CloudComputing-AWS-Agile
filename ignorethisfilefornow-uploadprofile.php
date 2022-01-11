@@ -5,46 +5,64 @@ session_start();
 
 error_reporting(0);
 
-$userid = mysqli_real_escape_string($conn,$_SESSION["user_id"]);
+$mapid = mysqli_real_escape_string($conn,$_SESSION["map_id"]);
 
-$load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
+$load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$username = $row['full_name'];
+    	$mapname = $row['full_name'];
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
 
-if (isset($_POST["submit"])) {
+if(isset($_POST["ask"])) {
+  $globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
+  $question = mysqli_real_escape_string($conn, $_POST["question"]);
 
-  $role = mysqli_real_escape_string($conn, $_POST["projectRole"]);
-  $skilllevel = mysqli_real_escape_string($conn, $_POST["skilllevel"]);
-  $location = mysqli_real_escape_string($conn, $_POST["location"]);
-  $skillset = mysqli_real_escape_string($conn, $_POST["skillset"]);
-  $duration = mysqli_real_escape_string($conn, $_POST["period"]);
-  $projectname = mysqli_real_escape_string($conn, $_POST["projectName"]);
-  $taskdescription = mysqli_real_escape_string($conn, $_POST["taskdescription"]);
-  $weight = mysqli_real_escape_string($conn, $_POST["function"]);
-  $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
-  $createdbyuserid = $_SESSION["user_id"];
-  $globalid = rand(1000,5000);
-
-
-    $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1','$username','$globalid')";
-   // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
+$sql = "INSERT INTO mapservice (globalid, question) VALUES ('$globalid', '$question')";
 $result = mysqli_query($conn, $sql);
-$check = mysqli_query($conn, "SELECT id FROM service_requests WHERE id>='1002' ");
+$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' AND question = '$question' ");
 
 if (mysqli_num_rows($check)>0) {
-    echo "<script>alert('Request submitted successfully');</script>";
+    echo "<script>alert('Question posted successfully');</script>";
+	$globalid = '';
+        $question = '';
+	$_POST["globalid"] = '';
+	$_POST["question"] = '';
+
   } else {
-    echo "<script>alert('Submission failed');</script>";
+    echo "<script>alert('Question not posted');</script>";
+  }
+}
+
+if (isset($_POST["upload"])) {
+
+  $globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
+  $employeename = mysqli_real_escape_string($conn, $_POST["employeename"]);
+  $location = mysqli_real_escape_string($conn, $_POST["location"]);
+  $skilllevel = mysqli_real_escape_string($conn, $_POST["skilllevel"]);
+  $skillset = mysqli_real_escape_string($conn, $_POST["skillset"]);
+  $duration = mysqli_real_escape_string($conn, $_POST["period"]);
+  $language = mysqli_real_escape_string($conn, $_POST["language"]);
+  $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
+  $price = mysqli_real_escape_string($conn, $_POST["price"]);
+
+
+    $sql = "INSERT INTO mapservice (globalid, mapid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments,price) VALUES ('$globalid', '$mapid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapname','$language','$comments','$price')";
+   // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
+$result = mysqli_query($conn, $sql);
+$check = mysqli_query($conn, "SELECT mapid FROM mapservice WHERE mapid ='$mapid' ");
+
+if (mysqli_num_rows($check)>0) {
+    echo "<script>alert('Profile uploaded successfully');</script>";
+  } else {
+    echo "<script>alert('Upload failed');</script>";
   }
 };
 
 ?>
-  
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +72,7 @@ if (mysqli_num_rows($check)>0) {
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consumer Portal</title>
+    <title>MAP Portal</title>
     <!-- insert stylesheets here -->
 
     <style>
@@ -186,6 +204,30 @@ if (mysqli_num_rows($check)>0) {
         .req_service_body td{
             padding:20px 0 20px 0;
         }
+
+        .qa_service_wrapper{
+            margin-top:20px;
+        }
+
+        .qa_service_table{
+            width:100%;
+        }
+
+        .qa_service_head{
+            border-bottom: 1px solid #ccc!important;
+        }
+
+        .qa_service_head th{
+            padding-bottom:20px;
+        }
+
+        .qa_service_body{
+            border-bottom: 1px solid #ccc!important;
+        }
+
+        .qa_service_body td{
+            padding:20px 0 20px 0;
+        }
     </style>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -196,7 +238,7 @@ if (mysqli_num_rows($check)>0) {
     <nav class="navbar navbar-light bg-light p-3">
   <div class="d-flex col-12 col-md-3 col-lg-2 mb-2 mb-lg-0 flex-wrap flex-md-nowrap justify-content-between">
       <a class="navbar-brand" href="#">
-          Consumer Dashboard
+          MAP Dashboard
       </a>
       <button class="navbar-toggler d-md-none collapsed mb-3" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -209,7 +251,7 @@ if (mysqli_num_rows($check)>0) {
 
       <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
-            Hello, <?php echo $username ?>
+            Hello, <?php echo $mapname ?>
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li><a class="dropdown-item" href="#">Settings</a></li>
@@ -237,21 +279,15 @@ if (mysqli_num_rows($check)>0) {
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="profileselect.php">
+                          <a class="nav-link" href="javascript:OpenQA();">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                            <span class="ml-2">View Uploaded profiles & Select Profile</span>
-                          </a>
-                        </li>
-			<li class="nav-item">
-                          <a class="nav-link" href="negotiateconsumer.php">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                            <span class="ml-2">Negotiate Price with MAP </span>
+                            <span class="ml-2">Q&A, Comments </span>
                           </a>
                         </li>
                         <li class="nav-item js-service-request-form">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="javascript:openServiceRequestForm();">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                                <span class="ml-2">Create New Service Request</span>
+                                <span class="ml-2"> Upload Profiles </span>
                             </a>
                         </li>
                        </ul>
@@ -265,31 +301,37 @@ if (mysqli_num_rows($check)>0) {
                     </ol>
                 </nav>
                 <h1 class="h2">Dashboard</h1>
-                <p>This is the homepage of <?php echo $username ?> </p>
+                <p>This is the homepage of <?php echo $mapname ?> </p>
             </main>
         </div>
     </div>
 
-    <!-- Service Request form -->
+    <!-- Upload Profile form -->
     <div class="request-form-wrapper form-hide js-request-form-wrapper">
         <div class="form-head">
-            <h1 class="display-6 form__title">Service Request Form</h1>
+            <h1 class="display-6 form__title">Profile Upload Form</h1>
             <button class="btn btn-dark js-request-form-close btn-desktop">Close</button>
             <button class="btn-sm btn-dark js-request-form-close btn-mobile">Close</button>
         </div>
         <form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
-                <div class="mb-3 row">
-                    <label for="projectName" class="col-sm-2 col-form-label">Project Name:</label>
+		<div class="mb-3 row">
+                    <label for="globalid" class="col-sm-2 col-form-label">Unique Application Number:</label>
                     <div class="col-sm-10">
-                        <input id="projectName" name="projectName" class="form-control" type="text" placeholder="Project Name" value="<?php echo $_POST["projectName"]; ?>" required />
+                        <input id="globalid" name="globalid" class="form-control" type="text" placeholder="Copy the Unique Application Number for the desired Request from 'Requested Services' section and paste it here" value="<?php echo $_POST["globalid"]; ?>" required />
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="projectRole" class="col-sm-2 col-form-label">Project Role:</label>
+                    <label for="employeename" class="col-sm-2 col-form-label">Employee Name:</label>
                     <div class="col-sm-10">
-                        <input id="projectRole" name="projectRole" class="form-control" type="text" placeholder="Project Role" value="<?php echo $_POST["projectRole"]; ?>" />
+                        <input id="employeename" name="employeename" class="form-control" type="text" placeholder="Employee Name" value="<?php echo $_POST["employeename"]; ?>" required />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="language" class="col-sm-2 col-form-label">Language :</label>
+                    <div class="col-sm-10">
+                        <input id="language" name="language" class="form-control" type="text" placeholder="Languages known" value="<?php echo $_POST["language"]; ?>" />
                     </div>
                 </div>
                 <div class="mb-3 row">
@@ -299,45 +341,39 @@ if (mysqli_num_rows($check)>0) {
                     </div>
                 </div>
 	        <div class="mb-3 row">
-                    <label for="skilllevel" class="col-sm-2 col-form-label">Level of Expertise needed:</label>
+                    <label for="skilllevel" class="col-sm-2 col-form-label">Level of Expertise:</label>
                     <div class="col-sm-10"> 
-                        <input id="skilllevel" name="skilllevel" class="form-control" type="text" placeholder="1/2/3 (1 - Intermediate, 2-Advanced, 3-Expert)" value="<?php echo $_POST["skilllevel"]; ?>" />
+                        <input id="skilllevel" name="skilllevel" class="form-control" type="text" placeholder="1/2/3" value="<?php echo $_POST["skilllevel"]; ?>" />
                     </div>
 		</div>
 		<div class="mb-3 row">
                     <label for="skillset" class="col-sm-2 col-form-label">Skill Set</label>
                     <div class="col-sm-10">
-                        <input id="skillset" name="skillset" class="form-control" type="text" placeholder="Programming languages, Project methodologies,..preferred" value="<?php echo $_POST["skillset"]; ?>" />
+                        <input id="skillset" name="skillset" class="form-control" type="text" placeholder="Programming languages known, Project methodologies,.." value="<?php echo $_POST["skillset"]; ?>" />
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="period" class="col-sm-2 col-form-label">Time Period:</label>
                     <div class="col-sm-10">
-                        <input id="period" name="period" class="form-control" type="text" placeholder="Duration of the role" value="<?php echo $_POST["period"]; ?>" />
-                    </div>
-                </div>
-		<div class="mb-3 row">
-                    <label for="function" class="col-sm-2 col-form-label">Commercial/Functional weight:</label>
-                    <div class="col-sm-10">
-                        <input id="function" name="function" class="form-control" type="text" placeholder="Enter percentages" value="<?php echo $_POST["function"]; ?>" />
-                    </div>
-                </div>
-	        <div class="mb-3 row">
-                    <label for="taskdescription" class="col-sm-2 col-form-label">Detailed Task Description:</label>
-                    <div class="col-sm-10">
-                        <textarea id="taskdescription" name="taskdescription" class="form-control" type="text" placeholder="Enter more detailed information" rows="3" value="<?php echo $_POST["taskdescription"]; ?>" ></textarea>
+                        <input id="period" name="period" class="form-control" type="text" placeholder="Duration available for" value="<?php echo $_POST["period"]; ?>" />
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="comments" class="col-sm-2 col-form-label">Comments:</label>
                     <div class="col-sm-10">
-                        <textarea id="comments" name="comments" class="form-control" type="text" placeholder="Additional Info/Comments" rows="3" value="<?php echo $_POST["comments"]; ?>" ></textarea>
+                        <textarea id="comments" name="comments" class="form-control" type="text" placeholder="Comments" rows="3" value="<?php echo $_POST["comments"]; ?>" ></textarea>
+                    </div>
+                </div>
+		<div class="mb-3 row">
+                    <label for="price" class="col-sm-2 col-form-label">Offered Price:</label>
+                    <div class="col-sm-10">
+                        <textarea id="price" name="price" class="form-control" type="text" placeholder="Enter the initial bid price (without comma or dot)" rows="1" value="<?php echo $_POST["price"]; ?>" ></textarea>
                     </div>
                 </div>
                 <div class="form-input-actions">                
                     <div id="actionButtons">
-                        <button class="btn btn-secondary js-reset-service-form">Reset</button>
-                        <input type="submit" class="btn" name="submit" value="Submit Req" />
+                        <button class="btn btn-secondary js-reset-service-form" onclick="resetInputFields()">Reset</button>
+                        <input type="submit" class="btn" name="upload" value="Upload Profile" />
                     </div>
                 </div>
             </div>
@@ -370,7 +406,7 @@ if (mysqli_num_rows($check)>0) {
 
                 <tr class="req_service_body">
                 <?php
-                $sql = "SELECT * FROM service_requests WHERE Created_by_userid='$userid'";
+                $sql = "SELECT * FROM service_requests WHERE NOT Submission_status = '0,5' ";
                 
                 $result = $conn->query($sql);
 
@@ -378,7 +414,6 @@ if (mysqli_num_rows($check)>0) {
 
                     echo '<table border="0" cellspacing="2" cellpadding="20">
                     <tr class="req_service_head">
-			<th> Unique Application Number </th>
                         <th>Project Name</th>
                         <th>Project Role</th>
                         <th>Location</th>
@@ -387,12 +422,13 @@ if (mysqli_num_rows($check)>0) {
                         <th>Time Period</th>
                         <th>Commercial/Functional weight</th>
                         <th>Detailed Task Description</th>
+			<th>Consumer name</th>
                         <th>Status</th>
+			<th>Unique Application Number </th>
                         <th>Action</th>
                     </tr>';
 
                     while($row = $result->fetch_assoc()) {
-			$field0 = $row["globalid"];
                         $field1 = $row["projectname"];
                         $field2 = $row["role"];
                         $field3 = $row["location"];
@@ -401,32 +437,27 @@ if (mysqli_num_rows($check)>0) {
                         $field6 = $row["duration"];
                         $field7 = $row["weight"];
                         $field8 = $row["taskdescription"];
-                        
+                        $field9 = $row["created_by"];
+			$field11 = $row["globalid"];
                         
 
                         switch($row["Submission_status"]) {
-                            case 0:
-                                $field9 = "in Creation";
-                                break;
+                          
                             case 1:
-                                $field9 = "Requested";
+                                $field10 = "Requested";
                                 break;
                             case 2:
-                                $field9 = "Profile Uploaded";
+                                $field10 = "Profile Uploaded";
                                 break;
                             case 3:
-                                $field9 = "Appointed";
+                                $field10 = "Appointed";
                                 break;
                             case 4:
-                                $field9 = "Evaluated";
-                                break;
-                            case 5:
-                                $field9 = "Cancelled";
+                                $field10 = "Evaluated";
                                 break;
                         }
 
                         echo '<tr>
-				<td>'.$field0.'</td>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -436,7 +467,9 @@ if (mysqli_num_rows($check)>0) {
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
                                 <td>'.$field9.'</td> 
-                                <td> <button class="btn_upload_profile" >View Profile uploaded </button> </td>
+				<td>'.$field10.'</td>
+				<td>'.$field11.'</td>
+                                <td> <button class="btn_upload_profile" > Upload Profile </button> </td>
                             </tr>';
                                 
                                 "<br>";
@@ -453,8 +486,93 @@ if (mysqli_num_rows($check)>0) {
         </div>
     </div>
     
+<!-- Q&A, Comments Section -->
+    <div class="request-form-wrapper form-hide js-qa-form-wrapper">
+        <div class="form-head">
+            <h1 class="display-6 form__title">Q&A, Comments </h1>
+            <button class="btn btn-dark js-request-form-close btn-desktop" onclick="closeQAServ()">Close</button>
+            <button class="btn-sm btn-dark qa_ser_close js-request-form-close btn-mobile">Close</button>
+        </div>
+ 	<form class="form-container js-qa-form-container" method="post">
+            <!-- No id should be same. Change / replace at all occurrences -->
+            <div class="form-inputs">
+		<div class="mb-3 row">
+                    <label for="globalid" class="col-sm-2 col-form-label">Unique Application Number:</label>
+                    <div class="col-sm-10">
+                        <input id="globalid" name="globalid" class="form-control" type="text" placeholder="Copy the Unique Application Number for the desired Request on which you want to question" value="<?php echo $_POST["globalid"]; ?>" required />
+                    </div>
+                </div>
+		<div class="mb-3 row">
+                    <label for="question" class="col-sm-2 col-form-label">Question:</label>
+                    <div class="col-sm-10">
+                        <textarea id="question" name="question" class="form-control" type="text" placeholder="Type your question" rows="3" value="<?php echo $_POST["question"]; ?>" ></textarea>
+                    </div>
+                </div>
+                <div class="form-input-actions">                
+                    <div id="actionButtons">
+                        <button class="btn btn-secondary js-reset-qaservice-form">Reset</button>
+                        <input type="submit" class="btn" name="ask" value="Ask Question" />
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="qa_service_wrapper">
+            <table class="qa_service_table">
+                <!--
+                <tr class="qa_service_head">
+                    <th style="width: 50px;">No.</th>
+		    <th>Unique Application Number</th>
+                    <th>Questions Asked</th>
+                    <th>Consumer Name</th>
+                    <th>Response</th>
+                </tr>
+                -->
+
+                <tr class="qa_service_body">
+                <?php
+		$sql = "SELECT * FROM mapservice";
+             //   $sql = "SELECT * FROM mapservice WHERE NOT question = 'NULL'";
+                
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+
+                    echo '<table border="0" cellspacing="2" cellpadding="20">
+                    <tr class="qa_service_head">
+			<th>Unique Application Number</th>
+                    	<th>Questions Asked</th>
+                   	<th>Consumer Name</th>
+                   	<th>Response</th>
+                    </tr>';
+
+                    while($row = $result->fetch_assoc()) {
+                        $field1 = $row["globalid"];
+                        $field2 = $row["question"];
+                        $field3 = $row["created_by"];
+                        $field4 = $row["response"];                        
+
+                        echo '<tr>
+                                <td>'.$field1.'</td> 
+                                <td>'.$field2.'</td> 
+                                <td>'.$field3.'</td> 
+                                <td>'.$field4.'</td> 
+                            </tr>';
+                                
+                                "<br>";
+                    }
+
+                    $result->free();
+                }
+                else{
+                    echo "0 results";
+                }
+                ?>
+                </tr>
+            </table>
+        </div>
+    </div>
     <script>
-        var requestForm, requestFormOpen, requestFormClose, requestFormClasses, resetFormButton, reqServices, reqServiceClose;
+        var requestForm, requestFormOpen, requestFormClose, requestFormClasses, resetFormButton, reqServices, reqServiceClose, qaServices, qaServiceClose, qaForm, qaFormOpen, qaFormClose, qaFormClasses, qaresetFormButton, requestFormFields, qaFormFields;
 
         function _init() {
             requestForm = document.querySelector('.js-request-form-wrapper');
@@ -466,6 +584,12 @@ if (mysqli_num_rows($check)>0) {
 
             reqServices = document.querySelector('.req_ser').classList;
             reqServiceClose = document.querySelector('.req_ser_close').classList;
+
+	    qaServices = document.querySelector('.qa_ser').classList;
+	    qaServiceClose = document.querySelector('.qa_ser_close').classList;
+            qaFormFields = qaForm.querySelectorAll('.js-qa-form-container input');
+            qaFormClasses = qaForm.classList;
+            qaresetFormButton = qaForm.querySelector('.js-reset-qaservice-form');
         }
 
         // Method to open service request form.
@@ -486,6 +610,24 @@ if (mysqli_num_rows($check)>0) {
             }
         }
 
+	// Method to open Q&A form.
+        function openQAForm() {
+            if(qaFormOpen !== undefined || qaFormOpen !== null) {
+                qaFormOpen.addEventListener('click', function() {
+                    qaFormClasses.contains('form-hide') && qaFormClasses.remove('form-hide');
+                });
+            }
+
+            if(qaFormClose !== undefined || qaFormClose !== null) {
+                qaFormClose.forEach(element => {
+                    element.addEventListener('click', function() {
+                        !qaFormClasses.contains('form-hide') && qaFormClasses.add('form-hide');
+                        resetqaInputFields();
+                    });
+                });
+            }
+        }
+
         function OpenReSer(){
             reqServices.remove('form-hide');
         }
@@ -494,7 +636,14 @@ if (mysqli_num_rows($check)>0) {
             reqServices.add('form-hide');
         }
 
-        // Function to reset input fields
+	function OpenQA(){
+            qaServices.remove('form-hide');
+        }
+
+        function closeQAServ(){
+            qaServices.add('form-hide');
+        }
+        // Function to reset input fields in Service Request Form
         function resetInputFields() {
             resetFormButton.addEventListener('click', function() {
                 for(var i = 0 ; i < requestFormFields.length ; i++) {
@@ -502,12 +651,21 @@ if (mysqli_num_rows($check)>0) {
                 }
             });
         }
+	// Function to reset input fields in Q & A Form
+        function resetqaInputFields() {
+            qaresetFormButton.addEventListener('click', function() {
+                for(var i = 0 ; i < qaFormFields.length ; i++) {
+                    qaFormFields[i].value =  '';
+                }
+            });
+        }
 
         _init();
         openServiceRequestForm();
+	openQAForm();
         resetInputFields();
+	resetqaInputFields();
 
     </script>
 </body>
 </html>
-  

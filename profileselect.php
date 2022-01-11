@@ -11,7 +11,7 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$username = $row['full_name'];
+    	$username = $row['full_name'];	
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -72,7 +72,7 @@ if (isset($_POST["accept"])) {
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice  "; //WHERE created_by = '$username' AND WHERE agreed_status = '0'
+	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '0' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
