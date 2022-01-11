@@ -28,9 +28,10 @@ if (isset($_POST["submit"])) {
   $weight = mysqli_real_escape_string($conn, $_POST["function"]);
   $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
   $createdbyuserid = $_SESSION["user_id"];
+  $globalid = rand(1000,5000);
 
 
-    $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1')";
+    $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1','$username','$globalid')";
    // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
 $result = mysqli_query($conn, $sql);
 $check = mysqli_query($conn, "SELECT id FROM service_requests WHERE id>='1002' ");
@@ -232,13 +233,13 @@ if (mysqli_num_rows($check)>0) {
                         <li class="nav-item">
                           <a class="nav-link" href="javascript:OpenReSer();">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                            <span class="ml-2">Requested Services</span>
+                            <span class="ml-2">Requested Services & Status</span>
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="status.php">
+                          <a class="nav-link" href="profileselect.php">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                            <span class="ml-2">Service Request Status</span>
+                            <span class="ml-2">View Uploaded profiles & Select Profile</span>
                           </a>
                         </li>
                         <li class="nav-item js-service-request-form">
@@ -292,15 +293,15 @@ if (mysqli_num_rows($check)>0) {
                     </div>
                 </div>
 	        <div class="mb-3 row">
-                    <label for="skilllevel" class="col-sm-2 col-form-label">Level of Expertise:</label>
+                    <label for="skilllevel" class="col-sm-2 col-form-label">Level of Expertise needed:</label>
                     <div class="col-sm-10"> 
-                        <input id="skilllevel" name="skilllevel" class="form-control" type="text" placeholder="1/2/3" value="<?php echo $_POST["skilllevel"]; ?>" />
+                        <input id="skilllevel" name="skilllevel" class="form-control" type="text" placeholder="1/2/3 (1 - Intermediate, 2-Advanced, 3-Expert)" value="<?php echo $_POST["skilllevel"]; ?>" />
                     </div>
 		</div>
 		<div class="mb-3 row">
                     <label for="skillset" class="col-sm-2 col-form-label">Skill Set</label>
                     <div class="col-sm-10">
-                        <input id="skillset" name="skillset" class="form-control" type="text" placeholder="Programming languages known, Project methodologies,.." value="<?php echo $_POST["skillset"]; ?>" />
+                        <input id="skillset" name="skillset" class="form-control" type="text" placeholder="Programming languages, Project methodologies,..preferred" value="<?php echo $_POST["skillset"]; ?>" />
                     </div>
                 </div>
                 <div class="mb-3 row">
@@ -324,7 +325,7 @@ if (mysqli_num_rows($check)>0) {
                 <div class="mb-3 row">
                     <label for="comments" class="col-sm-2 col-form-label">Comments:</label>
                     <div class="col-sm-10">
-                        <textarea id="comments" name="comments" class="form-control" type="text" placeholder="Comments" rows="3" value="<?php echo $_POST["comments"]; ?>" ></textarea>
+                        <textarea id="comments" name="comments" class="form-control" type="text" placeholder="Additional Info/Comments" rows="3" value="<?php echo $_POST["comments"]; ?>" ></textarea>
                     </div>
                 </div>
                 <div class="form-input-actions">                
@@ -363,7 +364,7 @@ if (mysqli_num_rows($check)>0) {
 
                 <tr class="req_service_body">
                 <?php
-                $sql = "SELECT * FROM service_requests";
+                $sql = "SELECT * FROM service_requests WHERE Created_by_userid='$userid'";
                 
                 $result = $conn->query($sql);
 
@@ -371,6 +372,7 @@ if (mysqli_num_rows($check)>0) {
 
                     echo '<table border="0" cellspacing="2" cellpadding="20">
                     <tr class="req_service_head">
+			<th> Unique Application Number </th>
                         <th>Project Name</th>
                         <th>Project Role</th>
                         <th>Location</th>
@@ -384,6 +386,7 @@ if (mysqli_num_rows($check)>0) {
                     </tr>';
 
                     while($row = $result->fetch_assoc()) {
+			$field0 = $row["globalid"];
                         $field1 = $row["projectname"];
                         $field2 = $row["role"];
                         $field3 = $row["location"];
@@ -395,12 +398,12 @@ if (mysqli_num_rows($check)>0) {
                         
                         
 
-                        switch($row["status"]) {
+                        switch($row["Submission_status"]) {
                             case 0:
                                 $field9 = "in Creation";
                                 break;
                             case 1:
-                                $field9 = "For Requested/Submitted";
+                                $field9 = "Requested";
                                 break;
                             case 2:
                                 $field9 = "Profile Uploaded";
@@ -412,11 +415,12 @@ if (mysqli_num_rows($check)>0) {
                                 $field9 = "Evaluated";
                                 break;
                             case 5:
-                                $field9 = "Canceled";
+                                $field9 = "Cancelled";
                                 break;
                         }
 
                         echo '<tr>
+				<td>'.$field0.'</td>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -426,7 +430,7 @@ if (mysqli_num_rows($check)>0) {
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
                                 <td>'.$field9.'</td> 
-                                <td> <button class="btn_upload_profile" >Upload Profile</button> </td>
+                                <td> <button class="btn_upload_profile" >View Profile uploaded </button> </td>
                             </tr>';
                                 
                                 "<br>";

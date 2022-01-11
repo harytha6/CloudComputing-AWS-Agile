@@ -93,6 +93,10 @@ UPDATE `service_requests` SET `globalid` = '138986', `created_at` = NULL WHERE `
 
 UPDATE `service_requests` SET `globalid` = '534239' WHERE `service_requests`.`id` = 1003;
 
+ALTER TABLE `service_requests` ADD `created_by` VARCHAR(255) NOT NULL AFTER `created_at`;
+
+UPDATE `service_requests` SET `created_by` = 'Testy Test' WHERE `service_requests`.`id` = 1003;
+
 
 
 
