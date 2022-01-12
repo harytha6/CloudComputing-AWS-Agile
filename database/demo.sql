@@ -110,6 +110,7 @@ CREATE TABLE `service_requests` (
   `created_by` varchar(255) NOT NULL,
   `updated_at` timestamp(6) NOT NULL DEFAULT current_timestamp(6),
   `Submission_status` int(3) DEFAULT NULL
+  `negotiateprice` int(10) NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
