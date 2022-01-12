@@ -20,7 +20,7 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   }
   if (isset($_POST["upload"])) {
     $profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
-    check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' ");
+    $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' ");
     if (mysqli_num_rows($check)>0) {
         $row = mysqli_fetch_assoc($check);
             $globalid = $row['globalid'];

@@ -19,21 +19,17 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   header("Location: dashboardforMAP.php");
   }
   if (isset($_POST["cancel"])) {
-  $profileid = mysqli_real_escape_string($conn, $_POST["globalid"]);
-  $check = mysqli_query($conn, "SELECT * FROM `mapservice` WHERE `globalid`='$globalid' ");
-  if (mysqli_num_rows($check)>0) {
-    $row = mysqli_fetch_assoc($check);
-        $globalid = $row['globalid'];
-    } else {
-        echo "<script>alert('No Application number found ');</script>";
-    }
+  $globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
+ 
   $sql = "UPDATE `mapservice` SET `submission_status`='5' WHERE globalid='$globalid' ";
   $result = mysqli_query($conn, $sql);
   $verify = mysqli_query($conn, "SELECT * FROM `mapservice` WHERE `globalid`='$globalid' AND `submission_status`='5'");  
   if (mysqli_num_rows($verify)>0) {
-       echo "<script>alert('Profile selected');</script>";
+       echo "<script>alert('Request Cancelled');
+       window.location = 'dashboardforMAP.php';
+       </script>";
     } else {
-        echo "<script>alert('Selection failed');</script>";
+        echo "<script>alert('Request cancellation failed');</script>";
     }
 
   }
@@ -46,86 +42,47 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   </head>
 <body>
 
+<h1>Uploaded Profiles</h1>
 
+<table class="content-table">
+  <thead>
+    <tr>
+  <th>Profile ID </th>
+  <th>Provided by MAP</th>
+        <th>Employee Name</th>
+        <th>Location</th>
+        <th>Skill Set</th>
+  <th>Skill Level</th>
+        <th>Duration available for</th>
+        <th>Language </th>
+        <th>Comments</th>
+  <th>Offered Price </th>
+  <th>Profile uploaded on </th>
+  <th>Submission status </th>
+    </tr>
+  </thead>
+  <tbody>
+   <?php
+  $sql2 = "SELECT * FROM mapservice"; 
+  
+      $result2 = $conn-> query($sql2);
 
+    if ($result2-> num_rows > 0) {
+        while ($row = $result2-> fetch_assoc()) {
+                $field1 = $row["profileid"];
 
- <div class="request-form-wrapper req_ser form-hide">
-        <div class="form-head">
-            <h1 class="display-6 form__title">Requested Service</h1>
-            <!--<button class="btn btn-dark js-request-form-close btn-desktop" onclick="closeReqServ()">Close</button>
-            <button class="btn-sm btn-dark req_ser_close js-request-form-close btn-mobile">Close</button>-->
-        </div>
-        <div class="req_service_wrapper">
-            <table class="req_service_table">
-                <!--
-                <tr class="req_service_head">
-                    <th style="width: 50px;">No.</th>
-                    <th>Project Name</th>
-                    <th>Project Role</th>
-                    <th>Location</th>
-                    <th>Level of Expertise</th>
-                    <th>Skill Set</th>
-                    <th>Time Period</th>
-                    <th>Commercial/Functional weight</th>
-                    <th>Detailed Task Description</th>
-                    <th>Comments</th>
-                </tr>
-                -->
-
-                <tr class="req_service_body">
-                <?php
-                $sql = "SELECT * FROM service_requests";
-                
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-
-                    echo '<table border="0" cellspacing="2" cellpadding="20">
-                    <tr class="req_service_head">
-                        <th>Project Name</th>
-                        <th>Project Role</th>
-                        <th>Location</th>
-                        <th>Level of Expertise</th>
-                        <th>Skill Set</th>
-                        <th>Time Period</th>
-                        <th>Commercial/Functional weight</th>
-                        <th>Detailed Task Description</th>
-      <th>Consumer name</th>
-                        <th>Status</th>
-      <th>Unique Application Number </th>
-                        <th>Action</th>
-                    </tr>';
-
-                    while($row = $result->fetch_assoc()) {
-                        $field1 = $row["projectname"];
-                        $field2 = $row["role"];
-                        $field3 = $row["location"];
-                        $field4 = $row["skilllevel"];
+                        $field2 = $row["currentcompany"];
+                        $field3 = $row["employeename"];
+                        $field4 = $row["location"];
                         $field5 = $row["skillset"];
-                        $field6 = $row["duration"];
-                        $field7 = $row["weight"];
-                        $field8 = $row["taskdescription"];
-                        $field9 = $row["created_by"];
-      $field11 = $row["globalid"];
-                        
-
-                        switch($row["Submission_status"]) {
-                          
-                            case 1:
-                                $field10 = "Requested";
-                                break;
-                            case 2:
-                                $field10 = "Profile Uploaded";
-                                break;
-                            case 3:
-                                $field10 = "Appointed";
-                                break;
-                            case 4:
-                                $field10 = "Evaluated";
-                                break;
-                        }
-
-                        echo '<tr>
+                        $field6 = $row["skilllevel"];
+                        $field7 = $row["durationavailablefor"];
+                        $field8 = $row["language"];
+                        $field9 = $row["comments"];
+      $field10 = $row["price"];
+      $field11 = $row["profileuploadedon"];
+      $field12 = $row["submission_status"];
+  echo '<tr>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -137,22 +94,21 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
                                 <td>'.$field9.'</td> 
         <td>'.$field10.'</td>
         <td>'.$field11.'</td>
-                                <td> <button class="btn_upload_profile" > Upload Profile </button> </td>
+        <td>'.$field12.'</td>
                             </tr>';
                                 
                                 "<br>";
-                    }
-
-                    $result->free();
-                }
-                else{
-                    echo "0 results";
-                }
-                ?>
-                </tr>
-            </table>
-        </div>
-    </div>
+  }
+  $result2->free();
+        //echo "</table>";
+    }
+    else {
+        echo "0 results";
+    }
+    ?>
+        
+  </tbody>
+</table>
 
   <h1>Cancel Request</h1>
   
