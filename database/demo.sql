@@ -110,7 +110,6 @@ CREATE TABLE `service_requests` (
   `created_by` varchar(255) NOT NULL,
   `updated_at` timestamp(6) NOT NULL DEFAULT current_timestamp(6),
   `Submission_status` int(3) DEFAULT NULL
-  `negotiateprice` int(10) NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -212,3 +211,5 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 ALTER TABLE `service_requests` ADD `template_status` INT(3) NULL DEFAULT NULL AFTER `Submission_status`;
+
+ALTER TABLE `service_requests` ADD `negotiateprice` int(10) NOT NULL;
