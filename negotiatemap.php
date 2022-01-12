@@ -61,6 +61,7 @@ if (isset($_POST["negotiate"])) {
 	<th>Consumer Negotiated price </th>
 	<th>Project Role </th>
 	<th>Negotiaion possible? </th>
+  <th>Your Negotiated price </th>
     </tr>
   </thead>
   <tbody>
@@ -81,10 +82,12 @@ if (isset($_POST["negotiate"])) {
 				$rows = mysqli_fetch_assoc($roleverify);
     				$field6 = $rows['role'];
 				$field7 = "Can Negotiate";
+        $field8 = $rows["negotiateprice"];
   				} else {
 					$field6 = "N/A";
 					$field7 = "Cannot Negotiate. Profile already appointed to other Consumers or Cancelled by MAP";
     					echo "<script>alert('The Application or Profile you are looking for is no longer available');</script>";
+              $field8 = "N/A";   
   				}
 
 		
@@ -96,6 +99,7 @@ if (isset($_POST["negotiate"])) {
 				<td>'.$field5.'</td> 
 				<td>'.$field6.'</td>
 				<td>'.$field7.'</td>
+        <td>'.$field8.'</td>
                             </tr>';
                                 
                                 "<br>";
