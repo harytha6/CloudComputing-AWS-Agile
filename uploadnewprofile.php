@@ -20,21 +20,13 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   header("Location: dashboardforMAP.php");
   }
 
-/*if (isset($_POST["exchange"])) {
-  $profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
-  $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' ");
-  if (mysqli_num_rows($check)>0) {
-    $row = mysqli_fetch_assoc($check);
-        $globalid = $_SESSION["global_id"];
-    } else {
-        echo "<script>alert('No Application number found ');</script>";
-    }*/
+
   
-  if (isset($_POST["upload_new_profile"])) {
+  if (isset($_POST["uploadnewprofile"])) {
 
   //$globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
   $globalidd = mysqli_real_escape_string ($conn,$_SESSION["global_id"]);
-  //print_r($_SESSION['global_id']);
+  
   $mapnamenew = mysqli_real_escape_string ($conn, $mapname);
   $employeename = mysqli_real_escape_string($conn, $_POST["employeename"]);
   $employeeid = mysqli_real_escape_string($conn, $_POST["employeeid"]);
@@ -45,21 +37,18 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   $language = mysqli_real_escape_string($conn, $_POST["language"]);
   $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
   $price = mysqli_real_escape_string($conn, $_POST["price"]);
-
-
+   
+    
     $sql = "INSERT INTO `mapservice` (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments, price, employeeid) VALUES ('$globalidd','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapnamenew','$language','$comments','$price','$employeeid')";
-
-    //$sql=INSERT INTO `mapservice` (`globalid`, `profileid`, `employeeid`, `employeename`, `location`, `skilllevel`, `skillset`, `submission_status`, `bid_status`, `agreed_status`, `durationavailablefor`, `currentcompany`, `language`, `comments`, `profileuploadedon`, `price`, `negotiateprice`, `created_by`, `question`, `response`) VALUES ('1', '2', '3', 'aa', 'aa', '2', 'aa', '2', '0', '0', '6', 'aa', 'aa', 'aa', 'current_timestamp(6).000000', '22', '', '', '', '')
+     
 $result = mysqli_query($conn, $sql);
 $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalidd' AND submission_status= '2' ");
 
 if (mysqli_num_rows($check)>0) {
- /* $status = mysqli_query($conn, "SELECT * FROM service_request WHERE globalid='$globaid' ");
-      $row = mysqli_fetch_assoc($status);
-      $username = $row['created_by'];
-  $profileid = $row['profileid'];
-  $statusupdate = mysqli_query($conn, "UPDATE `mapservice` SET `created_by` = '$username' WHERE profileid = '$profileid' ");*/
-    echo "<script>alert('Profile uploaded successfully');</script>";
+ 
+    echo "<script>alert('Profile uploaded successfully');
+     window.location = 'dashboardforMAP.php';
+       </script>";
   } else {
     echo "<script>alert('Upload failed');</script>";
   }
@@ -69,7 +58,7 @@ if (mysqli_num_rows($check)>0) {
 <!DOCTYPE html>
 <html>
   <head>
-  
+   <link rel="stylesheet" href="statusstyle.css">
   </head>
 <body>
 <h1>Upload New Profile</h1>
@@ -88,77 +77,76 @@ if (mysqli_num_rows($check)>0) {
                 <div class="mb-3 row">
                     <label for="profileid" class="col-sm-2 col-form-label">Employee Name:</label>
                     <div class="col-sm-10">
-                        <input id="employeename" name="employeename" class="form-control" type="text" placeholder="Enter the Employee name" value="<?php echo $_POST["employeename"]; ?>" required />
+                        <input id="employeename" name="employeename" class="form-control" type="text" placeholder="Enter the Employee name" value="<?php echo $_POST["employeename"]; ?>"  />
                     </div>
                 </div>
             
                 <div class="mb-3 row">
                     <label for="employeeid" class="col-sm-2 col-form-label">Employee ID:</label>
                     <div class="col-sm-10">
-                        <input id="employeeid" name="employeeid" class="form-control" type="text" placeholder="Enter the Employee ID" value="<?php echo $_POST["employeeid"]; ?>" required />
+                        <input id="employeeid" name="employeeid" class="form-control" type="text" placeholder="Enter the Employee ID" value="<?php echo $_POST["employeeid"]; ?>"  />
                     </div>
                 </div>
             
                 <div class="mb-3 row">
                     <label for="location" class="col-sm-2 col-form-label">Location:</label>
                     <div class="col-sm-10">
-                        <input id="location" name="location" class="form-control" type="text" placeholder="Enter the location" value="<?php echo $_POST["location"]; ?>" required />
+                        <input id="location" name="location" class="form-control" type="text" placeholder="Enter the location" value="<?php echo $_POST["location"]; ?>"  />
                     </div>
                 </div>
             
                 <div class="mb-3 row">
                     <label for="skilllevel" class="col-sm-2 col-form-label">Skill Level:</label>
                     <div class="col-sm-10">
-                        <input id="skilllevel" name="skilllevel" class="form-control" type="text" placeholder="Enter the Skill Level" value="<?php echo $_POST["skilllevel"]; ?>" required />
+                        <input id="skilllevel" name="skilllevel" class="form-control" type="text" placeholder="Enter the Skill Level" value="<?php echo $_POST["skilllevel"]; ?>"  />
                     </div>
                 </div>
             
                 <div class="mb-3 row">
                     <label for="skillset" class="col-sm-2 col-form-label">Skillset:</label>
                     <div class="col-sm-10">
-                        <input id="skillset" name="skillset" class="form-control" type="text" placeholder="Enter the Skillset" value="<?php echo $_POST["skillset"]; ?>" required />
+                        <input id="skillset" name="skillset" class="form-control" type="text" placeholder="Enter the Skillset" value="<?php echo $_POST["skillset"]; ?>" />
                     </div>
                 </div>
              
                 <div class="mb-3 row">
                     <label for="duration" class="col-sm-2 col-form-label">Duration:</label>
                     <div class="col-sm-10">
-                        <input id="duration" name="duration" class="form-control" type="text" placeholder="Enter the Duration" value="<?php echo $_POST["duration"]; ?>" required />
+                        <input id="duration" name="duration" class="form-control" type="text" placeholder="Enter the Duration" value="<?php echo $_POST["duration"]; ?>" />
                     </div>
                 </div>
               
                 <div class="mb-3 row">
                     <label for="language" class="col-sm-2 col-form-label">Language:</label>
                     <div class="col-sm-10">
-                        <input id="language" name="language" class="form-control" type="text" placeholder="Enter the Language" value="<?php echo $_POST["language"]; ?>" required />
+                        <input id="language" name="language" class="form-control" type="text" placeholder="Enter the Language" value="<?php echo $_POST["language"]; ?>" />
                     </div>
                 </div>
               
                 <div class="mb-3 row">
                     <label for="comments" class="col-sm-2 col-form-label">Comments:</label>
                     <div class="col-sm-10">
-                        <input id="comments" name="comments" class="form-control" type="text" placeholder="Enter the Comments" value="<?php echo $_POST["comments"]; ?>" required />
+                        <input id="comments" name="comments" class="form-control" type="text" placeholder="Enter the Comments" value="<?php echo $_POST["comments"]; ?>" />
                     </div>
                 </div>                           
               
                 <div class="mb-3 row">
                     <label for="price" class="col-sm-2 col-form-label">Price:</label>
                     <div class="col-sm-10">
-                        <input id="price" name="price" class="form-control" type="text" placeholder="Enter the price" value="<?php echo $_POST["price"]; ?>" required />
+                        <input id="price" name="price" class="form-control" type="text" placeholder="Enter the price" value="<?php echo $_POST["price"]; ?>" />
                     </div>
                 </div>  
-              </div>                           
                                          
-  </form>              
-<form class="form-container js-form-container" method="post">
-<div class="form-inputs">            
+                                         
+                
+            
 <div class="form-input-actions">                
                     <div id="actionButtons">
-                        <input type="submit" class="btn" name="upload_new_profile" value="Upload Profile" />
+                        <input type="submit" class="btn" name="uploadnewprofile" value="Upload Profile" />
                     </div>
                 </div>
             </div>
-          </form>
+ </form>
  <form class="form-container js-form-container" method="post">
            
     <div class="form-input-actions">                
@@ -166,7 +154,7 @@ if (mysqli_num_rows($check)>0) {
       <input type="submit" class="btn" name="back" value="Go Back to Dashboard" />
                     </div>
                 </div>
-            </div>
+ </div>
         </form>
 
         
