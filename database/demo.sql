@@ -72,7 +72,8 @@ CREATE TABLE `mapservice` (
   `negotiateprice` int(10) NOT NULL,
   `created_by` varchar(255) NOT NULL,
   `question` varchar(2000) NOT NULL,
-  `response` varchar(2000) NOT NULL
+  `response` varchar(2000) NOT NULL,
+  'feedback' varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
