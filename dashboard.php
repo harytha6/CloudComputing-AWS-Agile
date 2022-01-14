@@ -111,6 +111,7 @@ if (mysqli_num_rows($check)>0) {
             padding: 16px 32px;
             transition: transform .5s ease;
             transform: translateX(0);
+            overflow: scroll;
         }
 
         .request-form-wrapper.form-hide {
