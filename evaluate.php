@@ -10,8 +10,8 @@ $userid = mysqli_real_escape_string($conn,$_SESSION["user_id"]);
 $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
 
   if (mysqli_num_rows($load) > 0) {
-	$row = mysqli_fetch_assoc($load);
-    	$username = $row['full_name'];	
+    $row = mysqli_fetch_assoc($load);
+        $username = $row['full_name'];	
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -23,24 +23,18 @@ if (isset($_POST["back"])) {
 if (isset($_POST["accept"])) {
 
   	$profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
-	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' ");
-	if (mysqli_num_rows($check)>0) {
-		$row = mysqli_fetch_assoc($check);
-    		$globalid = $row['globalid'];
-  	} else {
-    		echo "<script>alert('No Application number found ');</script>";
-  	}
-
-	$sql = "UPDATE `service_requests` SET `Submission_status` = '3' WHERE globalid = '$globalid' ";
+	$feedback = mysqli_real_escape_string($conn, $_POST["feedback"]);
+	
+	$sql = "UPDATE mapservice SET `feedback` = '$feedback' WHERE profileid = '$profileid' ";
 	$result = mysqli_query($conn, $sql);
 
-	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '3' ");
+	$verify = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND agreed_status = '1' ");
+
 	if (mysqli_num_rows($verify)>0) {
-   		 echo "<script>alert('Profile selected');</script>";
+   		 echo "<script>alert('Feedback submitted successfully.');</script>";
   	} else {
-    		echo "<script>alert('Selection failed');</script>";
+    	echo "<script>alert('Feedback submission failed');</script>";
   	}
-	
 };
 
 ?>
@@ -68,6 +62,7 @@ if (isset($_POST["accept"])) {
       	<th>Comments</th>
 	<th>Offered Price </th>
 	<th>Profile uploaded on </th>
+	<th>Feedback</th>
     </tr>
   </thead>
   <tbody>
@@ -88,10 +83,11 @@ if (isset($_POST["accept"])) {
                         $field9 = $row["comments"];
 			$field10 = $row["price"];
 			$field11 = $row["profileuploadedon"];
+			$field12 = $row["feedback"];
 	echo '<tr>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
-                                <td>'.$field3.'</td> 
+                              <td>'.$field3.'</td> 
                                 <td>'.$field4.'</td> 
                                 <td>'.$field5.'</td> 
                                 <td>'.$field6.'</td> 
@@ -100,6 +96,7 @@ if (isset($_POST["accept"])) {
                                 <td>'.$field9.'</td> 
 				<td>'.$field10.'</td>
 				<td>'.$field11.'</td>
+				<td>'.$field12.'</td>
                             </tr>';
                                 
                                 "<br>";
@@ -115,43 +112,37 @@ if (isset($_POST["accept"])) {
   </tbody>
 </table>
 
-<h1>Evaluate Employees</h1>
-	
-	<form class="form-container js-form-container" method="post">
-            <!-- No id should be same. Change / replace at all occurrences -->
-            <div class="form-inputs">
-                <div class="mb-3 row">
-                    <label for="profileid" class="col-sm-2 col-form-label">Profile ID:</label>
-                    <div class="col-sm-10">
-                        <input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter the Profile ID to select" value="<?php echo $_POST["profileid"]; ?>" required />
-                    </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="feedback" class="col-sm-2 col-form-label">Feedback:</label>
-                    <div class="col-sm-10">
-                        <input id="feedback" name="feedback" class="form-control" type="text" placeholder="Type your feedback" value="<?php echo $_POST["profileid"]; ?>" required />
-                    </div>
-                </div>
-		<div class="form-input-actions">                
-                    <div id="actionButtons">
-                        <input type="submit" class="btn" name="accept" value="Submit Feedback" />
-                    </div>
-                </div>
-            </div>
-        </form>
+	<h1>Evaluate Employees</h1>
 
 	<form class="form-container js-form-container" method="post">
-           
+		<div class="form-inputs">
+			<div class="mb-3 row">
+				<label for="profileid" class="col-sm-2 col-form-label">Profile ID:</label>
+				<div class="col-sm-10">
+					<input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter the Profile ID to select" value="<?php echo $_POST["profileid"]; ?>" required />
+				</div>
+			</div>
+			<div class="mb-3 row">
+				<label for="feedback" class="col-sm-2 col-form-label">Feedback:</label>
+				<div class="col-sm-10">
+					<input id="feedback" name="feedback" class="form-control" type="text" placeholder="Type your feedback" value="<?php echo $_POST["feedback"]; ?>" required />
+				</div>
+			</div>
+				<div class="form-input-actions">                
+				<div id="actionButtons">
+					<input type="submit" class="btn" name="accept" value="Submit Feedback" />
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<form class="form-container js-form-container" method="post">
 		<div class="form-input-actions">                
-                    <div id="actionButtons">
-			<input type="submit" class="btn" name="back" value="Go Back to Dashboard" />
-                    </div>
-                </div>
-            </div>
-        </form>
-
-
-
+			<div id="actionButtons">
+				<input type="submit" class="btn" name="back" value="Go Back to Dashboard" />
+			</div>
+		</div>
+	</form>
 </body>
 </html>
 
