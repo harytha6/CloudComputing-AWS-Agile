@@ -456,7 +456,7 @@ if (mysqli_num_rows($check)>0) {
 
                     echo '
                     <tr class="req_service_head">
-			<th> Unique Application Number </th>
+			            <th> Unique Application Number </th>
                         <th>Project Name</th>
                         <th>Project Role</th>
                         <th>Location</th>
@@ -467,12 +467,12 @@ if (mysqli_num_rows($check)>0) {
                         <th>Detailed Task Description</th>
                         <th>Submission_Status</th>
                         <th>Cycle</th>
-			<th>Deadline</th>
-			<th>Expired Status </th>
+			            <th>Deadline</th>
+			            <th>Expired Status </th>
                     </tr>';
 
                     while($row = $result->fetch_assoc()) {
-			$field0 = $row["globalid"];
+			            $field0 = $row["globalid"];
                         $field1 = $row["projectname"];
                         $field2 = $row["role"];
                         $field3 = $row["location"];
@@ -481,8 +481,8 @@ if (mysqli_num_rows($check)>0) {
                         $field6 = $row["duration"];
                         $field7 = $row["weight"];
                         $field8 = $row["taskdescription"];
-			$field10 = $row["cycle"];
-			$field11 = $row["deadline"];                     
+			            $field10 = $row["cycle"];
+			            $field11 = $row["deadline"];                     
                         
 
                         switch($row["Submission_status"]) {
@@ -515,7 +515,7 @@ if (mysqli_num_rows($check)>0) {
                                 break;
                         }
                         echo '<tr>
-				<td>'.$field0.'</td>
+				                <td>'.$field0.'</td>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -525,9 +525,9 @@ if (mysqli_num_rows($check)>0) {
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
                                 <td>'.$field9.'</td> 
-				<td>'.$field10.'</td> 
-				<td>'.$field11.'</td> 
-				<td>'.$field12.'</td>
+				                <td>'.$field10.'</td> 
+				                <td>'.$field11.'</td> 
+				                <td>'.$field12.'</td>
                                 <!--<td> <button class="btn_upload_profile" >View Profile uploaded </button> </td> -->
                             </tr>';
                                 

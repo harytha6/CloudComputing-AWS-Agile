@@ -20,10 +20,10 @@ if (isset($_POST["back"])) {
   header("Location: dashboard.php");
 }
 
-if (isset($_POST["accept"])) {
+if (isset($_POST["submitdraft"])) {
 
-  	$profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
-	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' ");
+  	$globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
+	$check = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid ='$globalid' ");
 	if (mysqli_num_rows($check)>0) {
 		$row = mysqli_fetch_assoc($check);
     		$globalid = $row['globalid'];
@@ -31,14 +31,14 @@ if (isset($_POST["accept"])) {
     		echo "<script>alert('No Application number found ');</script>";
   	}
 
-	$sql = "UPDATE `service_requests` SET `Submission_status` = '0' WHERE globalid = '$globalid' ";
+	$sql = "UPDATE `service_requests` SET `Submission_status` = '1' WHERE globalid = '$globalid' ";
 	$result = mysqli_query($conn, $sql);
 
-	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '0' ");
+	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '1' ");
 	if (mysqli_num_rows($verify)>0) {
-   		 echo "<script>alert('Profile selected');</script>";
+   		 echo "<script>alert('Draft Submitted Successfully as New Service Request');</script>";
   	} else {
-    		echo "<script>alert('Selection failed');</script>";
+    		echo "<script>alert('Draft Submission failed');</script>";
   	}
 	
 };
@@ -57,37 +57,72 @@ if (isset($_POST["accept"])) {
 <table class="content-table">
   <thead>
     <tr>
-	<th>Global ID </th>
-	<th>Project Name</th>
-      	<th>Project Role</th>
-      	<th>Location</th>
-      	<th>Skill Level</th>
-	<th>Skill Set</th>
-      	<th>Duration</th>
-      	<th>Weight </th>
-      	<th>Task description</th>
-	<th>Comments</th>
+        			    <th> Unique Application Number </th>
+                        <th>Project Name</th>
+                        <th>Project Role</th>
+                        <th>Location</th>
+                        <th>Level of Expertise</th>
+                        <th>Skill Set</th>
+                        <th>Time Period</th>
+                        <th>Commercial/Functional weight</th>
+                        <th>Detailed Task Description</th>
+                        <th>Submission_Status</th>
+                        <th>Cycle</th>
+			            <th>Deadline</th>
+			            <th>Expired Status </th>
     </tr>
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '0' ";
+	$sql = "SELECT * FROM service_requests WHERE created_by = '$username' AND Submission_status = '0' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
         while ($row = $result-> fetch_assoc()) {
-            		$field1 = $row["globalid"];
-                        $field2 = $row["projectname"];
-                        $field3 = $row["role"];
-                        $field4 = $row["location"];
-                        $field5 = $row["skilllevel"];
-                        $field6 = $row["skillset"];
-                        $field7 = $row["duration"];
-                        $field8 = $row["weight"];
-                        $field9 = $row["taskdescription"];
-			$field10 = $row["comments"];
-			//$field11 = $row["profileuploadedon"];
-	echo '<tr>
+                        $field0 = $row["globalid"];
+                        $field1 = $row["projectname"];
+                        $field2 = $row["role"];
+                        $field3 = $row["location"];
+                        $field4 = $row["skilllevel"];
+                        $field5 = $row["skillset"];
+                        $field6 = $row["duration"];
+                        $field7 = $row["weight"];
+                        $field8 = $row["taskdescription"];
+			            $field10 = $row["cycle"];
+			            $field11 = $row["deadline"];                     
+                        
+
+                        switch($row["Submission_status"]) {
+                            case 0:
+                                $field9 = "in Creation";
+                                break;
+                            case 1:
+                                $field9 = "Requested";
+                                break;
+                            case 2:
+                                $field9 = "Profile Uploaded";
+                                break;
+                            case 3:
+                                $field9 = "Appointed";
+                                break;
+                            case 4:
+                                $field9 = "Evaluated";
+                                break;
+                            case 5:
+                                $field9 = "Cancelled";
+                                break;
+                        }
+
+			            switch($row["expired_status"]) {
+                            case 0:
+                                $field12 = "Valid";
+                                break;
+                            case 1:
+                                $field12 = "Expired";
+                                break;
+                        }
+	            echo '<tr>
+                                <td>'.$field0.'</td>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -97,37 +132,39 @@ if (isset($_POST["accept"])) {
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
                                 <td>'.$field9.'</td> 
-				                        <td>'.$field10.'</td>
+				                <td>'.$field10.'</td> 
+				                <td>'.$field11.'</td> 
+				                <td>'.$field12.'</td>
 				
-                            </tr>';
+                </tr>';
                                 
-                                "<br>";
+                "<br>";
 	}
 	$result->free();
         //echo "</table>";
     }
     else {
-        echo "0 results";
+        echo "No saved drafts available right now.";
     }
     ?>
         
   </tbody>
 </table>
 
-<h1>Select the saved service request</h1>
+<h1>Submit Draft</h1>
 	
 	<form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
                 <div class="mb-3 row">
-                    <label for="profileid" class="col-sm-2 col-form-label">Global ID:</label>
+                    <label for="globalid" class="col-sm-2 col-form-label">Enter Unique Application Number of Draft to submit:</label>
                     <div class="col-sm-10">
-                        <input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter the GlobalID of draft to submit" value="<?php echo $_POST["profileid"]; ?>" required />
+                        <input id="globalid" name="globalid" class="form-control" type="text" placeholder="Application Number" value="<?php echo $_POST["globalid"]; ?>" required />
                     </div>
                 </div>
 		<div class="form-input-actions">                
                     <div id="actionButtons">
-                        <input type="submit" class="btn" name="accept" value="Submit Draft" />
+                        <input type="submit" class="btn" name="submitdraft" value="Submit Draft" />
                     </div>
                 </div>
             </div>
