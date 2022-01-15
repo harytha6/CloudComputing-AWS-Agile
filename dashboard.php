@@ -469,6 +469,7 @@ if (mysqli_num_rows($check)>0) {
                         <th>Cycle</th>
 			            <th>Deadline</th>
 			            <th>Expired Status </th>
+                        <th>Action </th>
                     </tr>';
 
                     while($row = $result->fetch_assoc()) {
@@ -528,7 +529,7 @@ if (mysqli_num_rows($check)>0) {
 				                <td>'.$field10.'</td> 
 				                <td>'.$field11.'</td> 
 				                <td>'.$field12.'</td>
-                                <!--<td> <button class="btn_upload_profile" >View Profile uploaded </button> </td> -->
+                                <td> <button class="btn_upload_profile" > Copy Template </button> </td> 
                             </tr>';
                                 
                                 "<br>";
