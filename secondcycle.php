@@ -24,14 +24,14 @@ if (isset($_POST["start"])) {
 
   	$globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
 	$deadlinenew = mysqli_real_escape_string($conn, $_POST["deadline"]);
-	$sql = "UPDATE `service_requests` SET `Submission_status` = '1', cycle = '2', deadline_2nd = '$deadlinenew' WHERE globalid = '$globalid' ";
+	$sql = "UPDATE `service_requests` SET `Submission_status` = '1', `cycle` = '2', `deadline_new` = '$deadlinenew', expired_status = '0' WHERE globalid = '$globalid' AND NOT cycle = '2' ";
 	$result = mysqli_query($conn, $sql);
 
-	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '1' AND cycle = '2' AND deadline_2nd = '$deadlinenew' ");
+	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '1' AND cycle = '2' AND deadline_new = '$deadlinenew' AND expired_status = '0' ");
 	if (mysqli_num_rows($verify)>0) {
    		 echo "<script>alert('Second Cycle initiated');</script>";
   	} else {
-    		echo "<script>alert('Inititation of second cycle failed');</script>";
+    		echo "<script>alert('Inititation of second cycle failed / Already in Second Cycle');</script>";
   	}
 	
 };
@@ -45,44 +45,73 @@ if (isset($_POST["start"])) {
   </head>
 <body>
 
-<h1>Expired Service Requests</h1>
+<h1>Expired Service Requests in Cycle 1</h1>
 
 <table class="content-table">
   <thead>
     <tr>
-	<th>Profile ID </th>
-	<th>Provided by MAP</th>
-      	<th>Employee Name</th>
-      	<th>Location</th>
-      	<th>Skill Set</th>
-	<th>Skill Level</th>
-      	<th>Duration available for</th>
-      	<th>Language </th>
-      	<th>Comments</th>
-	<th>Offered Price </th>
-	<th>Profile uploaded on </th>
+			<th> Unique Application Number </th>
+                        <th>Project Name</th>
+                        <th>Project Role</th>
+                        <th>Location</th>
+                        <th>Level of Expertise</th>
+                        <th>Skill Set</th>
+                        <th>Time Period</th>
+                        <th>Submission_Status</th>
+                        <th>Cycle</th>
+			<th>Deadline</th>
+			<th> Expired Status </th>
     </tr>
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '0' ";
+	
+	$sql = "SELECT * FROM service_requests WHERE created_by = '$username' AND cycle = '1' AND expired_status='1' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
         while ($row = $result-> fetch_assoc()) {
-            		$field1 = $row["profileid"];
-                        $field2 = $row["currentcompany"];
-                        $field3 = $row["employeename"];
-                        $field4 = $row["location"];
+            		$field0 = $row["globalid"];
+                        $field1 = $row["projectname"];
+                        $field2 = $row["role"];
+                        $field3 = $row["location"];
+                        $field4 = $row["skilllevel"];
                         $field5 = $row["skillset"];
-                        $field6 = $row["skilllevel"];
-                        $field7 = $row["durationavailablefor"];
-                        $field8 = $row["language"];
-                        $field9 = $row["comments"];
-			$field10 = $row["price"];
-			$field11 = $row["profileuploadedon"];
+                        $field6 = $row["duration"];
+			$field8 = $row["cycle"];
+			$field9 = $row["deadline"];  
+	 		switch($row["Submission_status"]) {
+                            case 0:
+                                $field7 = "in Creation";
+                                break;
+                            case 1:
+                                $field7 = "Requested";
+                                break;
+                            case 2:
+                                $field7 = "Profile Uploaded";
+                                break;
+                            case 3:
+                                $field7 = "Appointed";
+                                break;
+                            case 4:
+                                $field7 = "Evaluated";
+                                break;
+                            case 5:
+                                $field7 = "Cancelled";
+                                break;
+                        }
+
+			 switch($row["expired_status"]) {
+                            case 0:
+                                $field10 = "Valid";
+                                break;
+                            case 1:
+                                $field10 = "Expired";
+                                break;
+                        }
 	echo '<tr>
-                                <td>'.$field1.'</td> 
+				<td>'.$field0.'</td>                                
+				<td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
                                 <td>'.$field4.'</td> 
@@ -92,7 +121,97 @@ if (isset($_POST["start"])) {
                                 <td>'.$field8.'</td> 
                                 <td>'.$field9.'</td> 
 				<td>'.$field10.'</td>
-				<td>'.$field11.'</td>
+                            </tr>';
+                                
+                                "<br>";
+	}
+	$result->free();
+        //echo "</table>";
+    }
+    else {
+        echo "0 results";
+    }
+    ?>
+        
+  </tbody>
+</table>
+
+<h1>Successfully initiated Second Cycle Service Requests</h1>
+
+<table class="content-table">
+  <thead>
+    <tr>
+			<th> Unique Application Number </th>
+                        <th>Project Name</th>
+                        <th>Project Role</th>
+                        <th>Location</th>
+                        <th>Level of Expertise</th>
+                        <th>Skill Set</th>
+                        <th>Time Period</th>
+                        <th>Submission_Status</th>
+                        <th>Cycle</th>
+			<th>Deadline</th>
+			<th> Expired Status </th>
+    </tr>
+  </thead>
+  <tbody>
+   <?php
+	
+	$sql = "SELECT * FROM service_requests WHERE created_by = '$username' AND cycle = '2' ";
+  	$result = $conn-> query($sql);
+
+    if ($result-> num_rows > 0) {
+        while ($row = $result-> fetch_assoc()) {
+            		$field0 = $row["globalid"];
+                        $field1 = $row["projectname"];
+                        $field2 = $row["role"];
+                        $field3 = $row["location"];
+                        $field4 = $row["skilllevel"];
+                        $field5 = $row["skillset"];
+                        $field6 = $row["duration"];
+			$field8 = $row["cycle"];
+			$field9 = $row["deadline_new"];  
+	 		switch($row["Submission_status"]) {
+                            case 0:
+                                $field7 = "in Creation";
+                                break;
+                            case 1:
+                                $field7 = "Requested";
+                                break;
+                            case 2:
+                                $field7 = "Profile Uploaded";
+                                break;
+                            case 3:
+                                $field7 = "Appointed";
+                                break;
+                            case 4:
+                                $field7 = "Evaluated";
+                                break;
+                            case 5:
+                                $field7 = "Cancelled";
+                                break;
+                        }
+
+			 switch($row["expired_status"]) {
+                            case 0:
+                                $field10 = "Valid";
+                                break;
+                            case 1:
+                                $field10 = "Expired";
+                                break;
+                        }
+	echo '<tr>
+				<td>'.$field0.'</td>                                
+				<td>'.$field1.'</td> 
+                                <td>'.$field2.'</td> 
+                                <td>'.$field3.'</td> 
+                                <td>'.$field4.'</td> 
+                                <td>'.$field5.'</td> 
+                                <td>'.$field6.'</td> 
+                                <td>'.$field7.'</td> 
+                                <td>'.$field8.'</td> 
+                                <td>'.$field9.'</td> 
+				<td>'.$field10.'</td>
                             </tr>';
                                 
                                 "<br>";
