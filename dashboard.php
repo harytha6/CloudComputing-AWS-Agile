@@ -529,7 +529,7 @@ if (mysqli_num_rows($check)>0) {
 				                <td>'.$field10.'</td> 
 				                <td>'.$field11.'</td> 
 				                <td>'.$field12.'</td>
-                                <td> <button class="btn_upload_profile" > Copy Template </button> </td> 
+                                <td> <button class="btn btn-light" onclick="copyTemplate()" > Copy Template </button> </td> 
                             </tr>';
                                 
                                 "<br>";
@@ -594,6 +594,11 @@ if (mysqli_num_rows($check)>0) {
                     requestFormFields[i].value =  '';
                 }
             });
+        }
+
+        //Function to navigate to Copy Template
+        function copyTemplate (){
+         header("Location: template.php");
         }
 
         _init();
