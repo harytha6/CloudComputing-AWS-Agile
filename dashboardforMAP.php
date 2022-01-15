@@ -12,7 +12,6 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
     	$mapname = $row['full_name'];
-	$mapcluster = $row['cluster'];
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -238,7 +237,7 @@ if (mysqli_num_rows($check)>0) {
                         <li class="nav-item">
                           <a class="nav-link" href="javascript:OpenReSer();">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                            <span class="ml-2">Requested Services & Status</span>
+                            <span class="ml-2">Requested Services & Status in the First Cycle</span>
                           </a>
                         </li>
                         <li class="nav-item">
@@ -275,6 +274,12 @@ if (mysqli_num_rows($check)>0) {
                             <a class="nav-link" href="negotiatemap.php">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                                 <span class="ml-2"> Negotiation </span>
+                            </a>
+                        </li>
+			<li class="nav-item ">
+                            <a class="nav-link" href="uploadprofileforsecondcycle.php">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                <span class="ml-2"> View Second Cycle of Service Requests & Upload Profiles </span>
                             </a>
                         </li>
                        </ul>
@@ -373,7 +378,7 @@ if (mysqli_num_rows($check)>0) {
         </form>
     </div>
 
-    <!-- Requested Services -->
+    <!-- Requested Services in the First Cycle -->
     <div class="request-form-wrapper req_ser form-hide">
         <div class="form-head">
             <h1 class="display-6 form__title">Requested Service</h1>
@@ -382,100 +387,109 @@ if (mysqli_num_rows($check)>0) {
         </div>
         <div class="req_service_wrapper">
             <table class="req_service_table">
-                <!--
-                <tr class="req_service_head">
-                    <th style="width: 50px;">No.</th>
-                    <th>Project Name</th>
-                    <th>Project Role</th>
-                    <th>Location</th>
-                    <th>Level of Expertise</th>
-                    <th>Skill Set</th>
-                    <th>Time Period</th>
-                    <th>Commercial/Functional weight</th>
-                    <th>Detailed Task Description</th>
-                    <th>Comments</th>
-                </tr>
-                -->
-
+               
                 <tr class="req_service_body">
-                <?php
-                $sql = "SELECT * FROM service_requests WHERE NOT Submission_status = '0,5' ";
+            <?php
+                echo '<table border="0" cellspacing="2" cellpadding="20">
+                   			<tr class="req_service_head">
+                        		<th> Unique Application Number </th>
+                        		<th>Project Name</th>
+                        		<th>Project Role</th>
+                        		<th>Location</th>
+                        		<th>Level of Expertise</th>
+                        		<th>Skill Set</th>
+                        		<th>Time Period</th>
+                        		<th>Commercial/Functional weight</th>
+                        		<th>Detailed Task Description</th>
+					            <th>Comments</th>
+                        		<th>Submission_Status</th>
+                        		<th>Cycle</th>
+					            <th>Deadline</th>
+					            <th> Expired Status </th>
+                    		</tr>';
+		
+		$firstsql = "SELECT * FROM map_contracts WHERE map_id = '$mapid' AND cluster = '1'  ";
                 
-                $result = $conn->query($sql);
+                $result = $conn->query($firstsql);
 
-                if ($result->num_rows > 0) {
-
-                    echo '<table border="0" cellspacing="2" cellpadding="20">
-                    <tr class="req_service_head">
-                        <th>Project Name</th>
-                        <th>Project Role</th>
-                        <th>Location</th>
-                        <th>Level of Expertise</th>
-                        <th>Skill Set</th>
-                        <th>Time Period</th>
-                        <th>Commercial/Functional weight</th>
-                        <th>Detailed Task Description</th>
-			<th>Consumer name</th>
-                        <th>Status</th>
-			<th>Unique Application Number </th>
-                        <th>Action</th>
-                    </tr>';
-
-                    while($row = $result->fetch_assoc()) {
-                        $field1 = $row["projectname"];
-                        $field2 = $row["role"];
-                        $field3 = $row["location"];
-                        $field4 = $row["skilllevel"];
-                        $field5 = $row["skillset"];
-                        $field6 = $row["duration"];
-                        $field7 = $row["weight"];
-                        $field8 = $row["taskdescription"];
-                        $field9 = $row["created_by"];
-			$field11 = $row["globalid"];
-                        
-
-                        switch($row["Submission_status"]) {
-                          
-                            case 1:
-                                $field10 = "Requested";
-                                break;
-                            case 2:
-                                $field10 = "Profile Uploaded";
-                                break;
-                            case 3:
-                                $field10 = "Appointed";
-                                break;
-                            case 4:
-                                $field10 = "Evaluated";
-                                break;
-                        }
-
-                        echo '<tr>
-                                <td>'.$field1.'</td> 
-                                <td>'.$field2.'</td> 
-                                <td>'.$field3.'</td> 
-                                <td>'.$field4.'</td> 
-                                <td>'.$field5.'</td> 
-                                <td>'.$field6.'</td> 
-                                <td>'.$field7.'</td> 
-                                <td>'.$field8.'</td> 
-                                <td>'.$field9.'</td> 
-				<td>'.$field10.'</td>
-				<td>'.$field11.'</td>
-                                <td> <button class="btn_upload_profile" > Upload Profile </button> </td>
-                            </tr>';
+            if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) 
+            {
+			$currentroleid = $row["role_id"];
+			$internalsql = "SELECT * FROM service_requests WHERE role_id = '$currentroleid' AND cycle = '1'  ";
+	 	  	$internalresult = $conn->query($internalsql);
+			if ($internalresult->num_rows > 0) 
+            {
+					while($introw = $internalresult->fetch_assoc()) 
+                    {
+						$field0 = $introw["globalid"];
+                        $field1 = $introw["projectname"];
+                        $field2 = $introw["role"];
+                        $field3 = $introw["location"];
+                        $field4 = $introw["skilllevel"];
+                        $field5 = $introw["skillset"];
+                        $field6 = $introw["duration"];
+                        $field7 = $introw["weight"];
+                        $field8 = $introw["taskdescription"];
+						$field9 = $introw["comments"];
+						$field11 = $introw["cycle"];
+						$field12 = $introw["deadline"];
+					    switch($introw["Submission_status"])
+                                    {
+                            		case 1:
+                               			$field10 = "Requested";
+                                		break;
+                            		case 2:
+                               			$field10 = "Profile Uploaded";
+                                		break;
+                            		case 3:
+                                		$field10 = "Appointed";
+                                		break;
+                            		case 4:
+                                		$field10 = "Evaluated";
+                                		break;
+                                    }
+					    switch($introw["expired_status"]) 
+                                    {
+                            		case 0:
+                                		$field13 = "Valid";
+                                		break;
+                            		case 1:
+                                		$field13 = "Expired";
+                                		break;
+					                }
+					    echo '<tr>
+					                <td>'.$field0.'</td>
+                                	<td>'.$field1.'</td> 
+                                	<td>'.$field2.'</td> 
+                                	<td>'.$field3.'</td> 
+                                	<td>'.$field4.'</td> 
+                                	<td>'.$field5.'</td> 
+                                	<td>'.$field6.'</td> 
+                                	<td>'.$field7.'</td> 
+                                	<td>'.$field8.'</td> 
+                                	<td>'.$field9.'</td> 
+					                <td>'.$field10.'</td>
+					                <td>'.$field11.'</td>
+					                <td>'.$field12.'</td>
+					                <td>'.$field13.'</td>
+                              		<!--  <td> <button class="btn_upload_profile" > Upload Profile </button> </td> -->
+                        </tr>';
                                 
-                                "<br>";
-                    }
-
-                    $result->free();
-                }
-                else{
-                    echo "0 results";
-                }
-                ?>
-                </tr>
-            </table>
+                        "<br>";
+					}
+			        $internalresult->free();
+			}
+			
+			}
+		
+			 $result->free();
+		    }
+		    else{
+                    echo "No contract information found";
+            }
+		?>		
+        </table>       
         </div>
     </div>
     

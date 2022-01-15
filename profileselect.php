@@ -68,6 +68,7 @@ if (isset($_POST["accept"])) {
       	<th>Comments</th>
 	<th>Offered Price </th>
 	<th>Profile uploaded on </th>
+	<th>Cycle</th>
     </tr>
   </thead>
   <tbody>
@@ -88,6 +89,12 @@ if (isset($_POST["accept"])) {
                         $field9 = $row["comments"];
 			$field10 = $row["price"];
 			$field11 = $row["profileuploadedon"];
+			$tempglobalid = $row["globalid"];
+			$internalsql = mysqli_query($conn, "SELECT cycle FROM service_requests WHERE globalid = '$tempglobalid' ");
+			if (mysqli_num_rows($internalsql) > 0) {
+			$row = mysqli_fetch_assoc($internalsql);
+			$field12 = $row['cycle'];	
+			}
 	echo '<tr>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
@@ -100,6 +107,7 @@ if (isset($_POST["accept"])) {
                                 <td>'.$field9.'</td> 
 				<td>'.$field10.'</td>
 				<td>'.$field11.'</td>
+				<td>'.$field12.'</td>
                             </tr>';
                                 
                                 "<br>";

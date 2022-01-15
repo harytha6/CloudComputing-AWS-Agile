@@ -221,3 +221,41 @@ ALTER TABLE `service_requests` ADD `deadline` DATE NOT NULL DEFAULT CURRENT_TIME
 ALTER TABLE `service_requests` ADD `deadline_new` DATE NULL DEFAULT NULL AFTER `deadline`;
 
 ALTER TABLE `service_requests` ADD `expired_status` INT NULL DEFAULT NULL AFTER `deadline_new`;
+
+ALTER TABLE `service_requests` ADD `role_id` INT NOT NULL AFTER `skilllevel`;
+
+--
+
+DROP TABLE IF EXISTS `map_contracts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `map_contracts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role_id` int DEFAULT NULL,
+  `map_id` int DEFAULT NULL,
+  `cluster` varchar(45) DEFAULT NULL,
+  `price` int DEFAULT NULL,
+  `bid_status` int DEFAULT NULL,
+  `aggrement_status` int DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `created_by` int DEFAULT NULL,
+  `updated_by` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `roles` (
+  `role_id` int NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(45) DEFAULT NULL,
+  `skill_level` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `roles` VALUES (1,'software engineer','1'),(6,'Programmer','1'),(7,'Programmer','2');
+
