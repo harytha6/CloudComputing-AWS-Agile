@@ -20,7 +20,7 @@ if (isset($_POST["back"])) {
   header("Location: dashboard.php");
 }
 
-if (isset($_POST["accept"])) {
+if (isset($_POST["use"])) {
 
   	$globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
 	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' ");
@@ -52,42 +52,42 @@ if (isset($_POST["accept"])) {
   </head>
 <body>
 
-<h1>Used Templates</h1>
+<h1>Existing Templates</h1>
 
 <table class="content-table">
   <thead>
     <tr>
-	<th>Global ID </th>
-	<th>Project Name</th>
-      	<th>Project Role</th>
-      	<th>Location</th>
-      	<th>Skill Level</th>
-	<th>Skill Set</th>
-      	<th>Duration</th>
-      	<th>Weight </th>
-      	<th>Task description</th>
-	<th>Comments</th>
+	                    <th>Global ID </th>
+                        <th>Project Name</th>
+                        <th>Project Role</th>
+                        <th>Location</th>
+                        <th>Level of Expertise</th>
+                        <th>Skill Set</th>
+                        <th>Time Period</th>
+                        <th>Commercial/Functional weight</th>
+                        <th>Detailed Task Description</th>
+                        <th>Comments</th>
     </tr>
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '0' ";
+	$sql = "SELECT * FROM service_requests WHERE created_by = '$username' AND template_status = '1' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
         while ($row = $result-> fetch_assoc()) {
-            		$field1 = $row["globalid"];
-                        $field2 = $row["projectname"];
-                        $field3 = $row["role"];
-                        $field4 = $row["location"];
-                        $field5 = $row["skilllevel"];
-                        $field6 = $row["skillset"];
-                        $field7 = $row["duration"];
-                        $field8 = $row["weight"];
-                        $field9 = $row["taskdescription"];
-			$field10 = $row["comments"];
-			//$field11 = $row["profileuploadedon"];
+            		    $field0 = $row["globalid"];
+                        $field1 = $row["projectname"];
+                        $field2 = $row["role"];
+                        $field3 = $row["location"];
+                        $field4 = $row["skilllevel"];
+                        $field5 = $row["skillset"];
+                        $field6 = $row["duration"];
+                        $field7 = $row["weight"];
+                        $field8 = $row["taskdescription"];
+			            $field10 = $row["comments"];
 	echo '<tr>
+                                <td>'.$field0.'</td>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -96,8 +96,7 @@ if (isset($_POST["accept"])) {
                                 <td>'.$field6.'</td> 
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
-                                <td>'.$field9.'</td> 
-				                        <td>'.$field10.'</td>
+				                <td>'.$field10.'</td>
 				
                             </tr>';
                                 
@@ -107,27 +106,27 @@ if (isset($_POST["accept"])) {
         //echo "</table>";
     }
     else {
-        echo "0 results";
+        echo "No saved templates. To use an already existing Service Request Form, go to 'Requested Services' section and click on 'Copy Template' button on the right edge.";
     }
     ?>
         
   </tbody>
 </table>
 
-<h1>Please select any from the available templates</h1>
+<h1>Use one of the above templates</h1>
 	
 	<form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
                 <div class="mb-3 row">
-                    <label for="globalid" class="col-sm-2 col-form-label">Global ID</label>
+                    <label for="globalid" class="col-sm-2 col-form-label">Global ID of template above to use</label>
                     <div class="col-sm-10">
-                        <input id="globalid" name="globalid" class="form-control" type="text" placeholder="Enter the GlobalID" value="<?php echo $_POST["globalid"]; ?>" required />
+                        <input id="globalid" name="globalid" class="form-control" type="text" placeholder="Copy Global ID" value="<?php echo $_POST["globalid"]; ?>" required />
                     </div>
                 </div>
 		<div class="form-input-actions">                
                     <div id="actionButtons">
-                        <input type="submit" class="btn" name="accept" value="Use Template" />
+                        <input type="submit" class="btn" name="use" value="Use Template" />
                     </div>
                 </div>
             </div>
