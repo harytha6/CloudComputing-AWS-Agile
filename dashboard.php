@@ -49,15 +49,6 @@ if (isset($_POST["submit"])) {
   $globalid = rand(1000,5000);
   $consumername = mysqli_real_escape_string($conn, $username);
 
-	$idsql  = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name ='$role' AND skill_level = '$skilllevel' ");
-	 if (mysqli_num_rows($roleidsql) > 0) {
-		$roww = mysqli_fetch_assoc($roleidsql);
-    		$idd = $roww['role_id'];
-		$roleid = mysqli_real_escape_string($conn, $roleidd);
-  	} else {
-    	echo "<script>alert('Corresponding contract details not found');</script>";
- 	}
-
 
     $sql = "INSERT INTO service_requests (deadline, role, skilllevel, role_id, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$deadline','$role', '$skilllevel', '$roleid' ,'$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1','$consumername','$globalid')";
    // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
@@ -87,22 +78,15 @@ if (mysqli_num_rows($check)>0) {
     $globalid = rand(1000,5000);
     $consumername = mysqli_real_escape_string($conn, $username);
 
-    $idsql  = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name ='$role' AND skill_level = '$skilllevel' ");
-	 if (mysqli_num_rows($roleidsql) > 0) {
-		$roww = mysqli_fetch_assoc($roleidsql);
-    		$idd = $roww['role_id'];
-		$id = mysqli_real_escape_string($conn, idd);
-  	}  
-  
-      $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','0','$username','$globalid')";
+      $sql = "INSERT INTO service_requests (deadline, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$deadline','$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','0','$username','$globalid')";
      // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
 $result = mysqli_query($conn, $sql);
 $check = mysqli_query($conn, "SELECT id FROM service_requests WHERE globalid = '$globalid' AND Submission_status = '0'");
 
 if (mysqli_num_rows($check)>0) {
-    echo "<script>alert('Request submitted successfully');</script>";
+    echo "<script>alert('Draft Saved successfully');</script>";
   } else {
-    echo "<script>alert('Submission failed');</script>";
+    echo "<script>alert('Saving of Draft failed');</script>";
   }
 };
 
@@ -444,7 +428,7 @@ if (mysqli_num_rows($check)>0) {
                     <div id="actionButtons">
                         <button class="btn btn-secondary js-reset-service-form">Reset</button>
                         <input type="submit" class="btn" name="submit" value="Submit" />
-                        <button class="btn btn-dark js-request-form-close btn-desktop" onclick="save.php">Save</button>
+                        <input type="submit" class="btn" name="save" value="Save Draft for Later" />
                         <button class="btn btn-dark js-request-form-close btn-desktop" onclick="template.php">Copy Template</button>
                     </div>
                 </div>
