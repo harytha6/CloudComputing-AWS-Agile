@@ -435,7 +435,7 @@ if (mysqli_num_rows($check)>0) {
 
                 if ($result->num_rows > 0) {
 
-                    echo '<table border="0" cellspacing="2" cellpadding="20">
+                    echo '
                     <tr class="req_service_head">
 			<th> Unique Application Number </th>
                         <th>Project Name</th>

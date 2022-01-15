@@ -23,7 +23,7 @@ if (isset($_POST["back"])) {
 if (isset($_POST["accept"])) {
 
   	$profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
-	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' ");
+	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' AND NOT Submission_status = '3,4,5' ");
 	if (mysqli_num_rows($check)>0) {
 		$row = mysqli_fetch_assoc($check);
     		$globalid = $row['globalid'];
@@ -49,27 +49,28 @@ if (isset($_POST["accept"])) {
   <head>
     <link rel="stylesheet" href="statusstyle.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Uploaded Profiles</title>
+    <title>Profile Selection</title>
   </head>
 <body>
 
-<h1 class="display-6 form__title">Uploaded Profiles</h1>
+<h1 class="display-6 form__title">Currently Available Profiles</h1>
 
 <table class="content-table">
   <thead>
     <tr>
-	<th>Profile ID </th>
-	<th>Provided by MAP</th>
-      	<th>Employee Name</th>
+        <th>Application Number </th>
+	    <th>Profile ID </th>
+	    <th>Provided by MAP</th>
+        <th>Employee Name</th>
       	<th>Location</th>
       	<th>Skill Set</th>
-	<th>Skill Level</th>
+	    <th>Skill Level</th>
       	<th>Duration available for</th>
       	<th>Language </th>
       	<th>Comments</th>
-	<th>Offered Price </th>
-	<th>Profile uploaded on </th>
-	<th>Cycle</th>
+	    <th>Offered Price </th>
+	    <th>Profile uploaded on </th>
+	    <th>Cycle</th>
     </tr>
   </thead>
   <tbody>
@@ -79,7 +80,8 @@ if (isset($_POST["accept"])) {
 
     if ($result-> num_rows > 0) {
         while ($row = $result-> fetch_assoc()) {
-            		$field1 = $row["profileid"];
+                        $field0 = $row["globalid"];
+            		    $field1 = $row["profileid"];
                         $field2 = $row["currentcompany"];
                         $field3 = $row["employeename"];
                         $field4 = $row["location"];
@@ -97,6 +99,7 @@ if (isset($_POST["accept"])) {
 			$field12 = $row['cycle'];	
 			}
 	echo '<tr>
+                                <td>'.$field0.'</td> 
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -124,7 +127,7 @@ if (isset($_POST["accept"])) {
   </tbody>
 </table>
 
-<h1>Select Profiles</h1>
+<h1>Select Profile</h1>
 	
 	<form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
