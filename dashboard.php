@@ -529,7 +529,7 @@ if (mysqli_num_rows($check)>0) {
 				                <td>'.$field10.'</td> 
 				                <td>'.$field11.'</td> 
 				                <td>'.$field12.'</td>
-                                <td> <button class="btn btn-light" onclick="copyTemplate()" > Copy Template </button> </td> 
+                                <td> <button class="btn btn-light" onclick="copyTemplate(' .$field0. ')" > Copy Template </button> </td> 
                             </tr>';
                                 
                                 "<br>";
@@ -597,8 +597,20 @@ if (mysqli_num_rows($check)>0) {
         }
 
         //Function to navigate to Copy Template
-        function copyTemplate (){
-         header("Location: template.php");
+        function copyTemplate (x){
+        <?php
+            include 'config.php';
+            $sql = "UPDATE `service_requests` SET `template_status` = '1' WHERE globalid = '$x' ";
+	        $result = mysqli_query($conn, $sql);
+
+	        $verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$x' AND template_status = '1' ");
+	        if (mysqli_num_rows($verify)>0) {
+   		        //echo "<script>alert('Draft Submitted Successfully as New Service Request');</script>";
+  	        } else {
+    		   // echo "<script>alert('Draft Submission failed');</script>";
+  	        }
+        ?>
+        // window.location.href = "template.php";
         }
 
         _init();
