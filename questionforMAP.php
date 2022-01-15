@@ -11,7 +11,7 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$mapname = $row['full_name'];
+    	$mapname = mysqli_real_escape_string($conn, $row['full_name']);
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -50,11 +50,12 @@ if (isset($_POST["Submit"])) {
 <html>
   <head>
     <link rel="stylesheet" href="statusstyle.css">
-    <title>Uploaded Profiles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Question and Answers</title>
   </head>
 <body>
 
-<h1>Uploaded Profiles</h1>
+<h1 class="display-6 form__title"> Asked Questions & Responses </h1>
 
 <table class="content-table">
   <thead>
@@ -73,7 +74,8 @@ if (isset($_POST["Submit"])) {
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE currentcompany= '$mapname' AND NOT question= '' ";
+	$mapnameformatted = mysqli_real_escape_string($conn, $mapname);
+	$sql = "SELECT * FROM mapservice WHERE currentcompany= '$mapnameformatted' AND NOT question= '' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
@@ -116,21 +118,21 @@ if (isset($_POST["Submit"])) {
   </tbody>
 </table>
 
-<h1>Select Profiles</h1>
+<h1 class="display-6 form__title">Select Profiles</h1>
 	
 	<form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
             	<div class="mb-3 row">
-                    <label for="profileid" class="col-sm-2 col-form-label">Profile ID:</label>
+                    <label for="profileid" class="col-sm-2 col-form-label">Ask Question for Profile ID:</label>
                     <div class="col-sm-10">
                         <input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter Profile ID" value="<?php echo $_POST["profileid"]; ?>" required />
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="profileid" class="col-sm-2 col-form-label">Question:</label>
+                    <label for="question" class="col-sm-2 col-form-label">Question:</label>
                     <div class="col-sm-10">
-                        <input id="question" name="question" class="form-control" type="text" placeholder="Enter your question" value="<?php echo $_POST["question"]; ?>" required />
+			<textarea id="question" name="question" class="form-control" type="text" placeholder="Enter your question" rows="7" value="<?php echo $_POST["question"]; ?>" ></textarea>
                     </div>
                 </div>
 		<div class="form-input-actions">                

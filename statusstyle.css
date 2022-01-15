@@ -1,9 +1,12 @@
-* {
-  font-family: sans-serif; /* Change your font family */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+* 
+ {
+  font-family: "Poppins", sans-serif; /* Change your font family */
 }
 
 h1 {
-  color: #009879;
+  font-size: 24px;
+  color: #666666;
 }
 
 .content-table {
@@ -17,10 +20,10 @@ h1 {
 }
 
 .content-table thead tr {
-  background-color: #009879;
-  color: #ffffff;
+  background-color: #b3b3ff;
+  color: #666666;
   text-align: left;
-  font-weight: bold;
+  /*font-weight: bold;*/
 }
 
 .content-table th,
@@ -41,7 +44,116 @@ h1 {
 }
 
 .content-table tbody tr.active-row {
-  font-weight: bold;
+  /*font-weight: bold;*/
   color: #009879;
 }
+
+.container {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.forms-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+form {
+  display: flex;
+  align-items: left;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0rem 5rem;
+  transition: all 0.2s 0.7s;
+  overflow: hidden;
+  grid-column: 1 / 2;
+  grid-row: 1/2;
+}
+
+.input-field {
+  max-width: 380px;
+  width: 150%;
+  background-color: #f0f0f0;
+  margin: 10px 0;
+  height: 55px;
+  border-radius: .3rem;
+  display: grid;
+  grid-template-columns: 15% 85%;
+  padding: 0 0.4rem;
+  position: relative;
+}
+
+.input-field i {
+  text-align: center;
+  line-height: 55px;
+  color: #acacac;
+  transition: 0.5s;
+  font-size: 1rem;
+}
+
+.input-field input {
+  background: none;
+  outline: none;
+  border: none;
+  line-height: 1;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.input-field input::placeholder {
+  color: #aaa;
+  font-weight: 500;
+}
+
+.btn {
+  width: 280px;
+  background-color: #666666;
+  border: none;
+  outline: none;
+  height: 49px;
+  border-radius: .3rem;
+  /* display: block; */
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.btn.transparent:hover {
+  background-color: white;
+  color: #4d84e2;
+}
+
+.btn:hover {
+  background-color: #4d84e2;
+}
+
+.form-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: left;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ced4da;
+        }
+
+        .form-inputs {
+            padding-top: 12px;
+	
+        }
+                
+        .form-input-actions {
+            margin-top: 12px;
+            display: flex;
+            justify-content: left;
+        }
+
 

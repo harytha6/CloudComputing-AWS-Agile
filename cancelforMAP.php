@@ -12,6 +12,7 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
     	$mapname = $row['full_name'];
+	$mapcluster = $row['cluster'];
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -19,17 +20,17 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   header("Location: dashboardforMAP.php");
   }
   if (isset($_POST["cancel"])) {
-  $globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
+  $profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
  
-  $sql = "UPDATE `mapservice` SET `submission_status`='5' WHERE globalid='$globalid' ";
+  $sql = "UPDATE `mapservice` SET `submission_status`='5' WHERE profileid='$profileid' "; //AND NOT deadline = '0';
   $result = mysqli_query($conn, $sql);
-  $verify = mysqli_query($conn, "SELECT * FROM `mapservice` WHERE `globalid`='$globalid' AND `submission_status`='5'");  
+  $verify = mysqli_query($conn, "SELECT * FROM `mapservice` WHERE `profileid`='$profileid' AND `submission_status`='5'");  
   if (mysqli_num_rows($verify)>0) {
-       echo "<script>alert('Request Cancelled');
+       echo "<script>alert('Profile Cancelled');
        window.location = 'dashboardforMAP.php';
        </script>";
     } else {
-        echo "<script>alert('Request cancellation failed');</script>";
+        echo "<script>alert('Profile cancellation failed');</script>";
     }
 
   }
@@ -110,20 +111,20 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   </tbody>
 </table>
 
-  <h1>Cancel Request</h1>
+  <h1>Cancel Profile</h1>
   
   <form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
                 <div class="mb-3 row">
-                    <label for="globalid" class="col-sm-2 col-form-label">Global ID:</label>
+                    <label for="profileid" class="col-sm-2 col-form-label">Profile ID:</label>
                     <div class="col-sm-10">
-                        <input id="gloablid" name="globalid" class="form-control" type="text" placeholder="Enter the Application Number to cancel the request" value="<?php echo $_POST["globalid"]; ?>" required />
+                        <input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter Profile ID" value="<?php echo $_POST["profileid"]; ?>" required />
                     </div>
                 </div>
     <div class="form-input-actions">                
                     <div id="actionButtons">
-                        <input type="submit" class="btn" name="cancel" value="Cancel Request" />
+                        <input type="submit" class="btn" name="cancel" value="Cancel Profile" />
                     </div>
                 </div>
             </div>

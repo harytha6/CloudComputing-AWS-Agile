@@ -12,6 +12,7 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
     	$mapname = $row['full_name'];
+	$mapcluster = $row['cluster'];
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -267,7 +268,7 @@ if (mysqli_num_rows($check)>0) {
                         <li class="nav-item">
                           <a class="nav-link" href="cancelforMAP.php">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                            <span class="ml-2">Cancel Request</span>
+                            <span class="ml-2">View Uploaded Profiles / Cancel Profile</span>
                           </a>
                         </li>
                         <li class="nav-item js-service-request-form">
