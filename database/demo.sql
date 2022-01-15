@@ -215,3 +215,9 @@ ALTER TABLE `service_requests` ADD `template_status` INT(3) NULL DEFAULT NULL AF
 ALTER TABLE `service_requests` ADD `negotiateprice` int(10) NOT NULL;
 
 ALTER TABLE `mapservice` ADD `feedback` varchar(200) NOT NULL;
+
+ALTER TABLE `service_requests` ADD `deadline` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `template_status`;
+
+ALTER TABLE `service_requests` ADD `deadline_new` DATE NULL DEFAULT NULL AFTER `deadline`;
+
+ALTER TABLE `service_requests` ADD `expired_status` INT NULL DEFAULT NULL AFTER `deadline_new`;

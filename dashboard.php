@@ -16,8 +16,17 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
 
+$datesql = "SELECT * FROM service_requests WHERE Created_by_userid='$userid' AND deadline < cast(now() as date) ";
+$dateresult = $conn->query($sql);
+		if ($dateresult->num_rows > 0) {
+			 while($row = $result->fetch_assoc()) {
+				$row["expired_status"] = '1';
+			}			
+		}
+
 if (isset($_POST["submit"])) {
 
+  $deadline = mysqli_real_escape_string($conn, $_POST["deadline"]);
   $role = mysqli_real_escape_string($conn, $_POST["projectRole"]);
   $skilllevel = mysqli_real_escape_string($conn, $_POST["skilllevel"]);
   $location = mysqli_real_escape_string($conn, $_POST["location"]);
@@ -29,9 +38,10 @@ if (isset($_POST["submit"])) {
   $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
   $createdbyuserid = $_SESSION["user_id"];
   $globalid = rand(1000,5000);
+  $consumername = mysqli_real_escape_string($conn, $username);
 
 
-    $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1','$username','$globalid')";
+    $sql = "INSERT INTO service_requests (deadline, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$deadline','$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1','$consumername','$globalid')";
    // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
 $result = mysqli_query($conn, $sql);
 $check = mysqli_query($conn, "SELECT id FROM service_requests WHERE globalid ='$globalid' AND Submission_status = '1' ");
@@ -260,31 +270,37 @@ if (mysqli_num_rows($check)>0) {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                                 <span class="ml-2">Draft Application</span>
                             </a>
-    </li>
-    <li class="nav-item js-service-request-form">
+    			</li>
+   			<li class="nav-item js-service-request-form">
                             <a class="nav-link" href="template.php">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                                 <span class="ml-2">Available Template</span>
                             </a>
-    </li>
+    			</li>
 			    <li class="nav-item">
                             <a class="nav-link" href="evaluate.php">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                 <span class="ml-2">Evaluate</span>
                             </a>
-    </li>
-                <li class="nav-item js-service-request-form">
+    			</li>
+                	<li class="nav-item js-service-request-form">
                             <a class="nav-link" href="cancelforConsumer.php">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                 <span class="ml-2">Cancel Requests</span>
                             </a>
-    </li>
-                <li class="nav-item js-service-request-form">
+    			</li>
+                	<li class="nav-item js-service-request-form">
                             <a class="nav-link" href="responseforConsumer.php">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                 <span class="ml-2">Send Response</span>
                             </a>
-    </li>
+    			</li>
+			<li class="nav-item">
+                          <a class="nav-link" href="secondcycle.php">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            <span class="ml-2"> Expired Requests / Initiate Second Cycle for Service Request </span>
+                          </a>
+                        </li>
                        </ul>
                 </div>
             </nav>
@@ -311,6 +327,12 @@ if (mysqli_num_rows($check)>0) {
         <form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
+		 <div class="mb-3 row">
+                    <label for="deadline" class="col-sm-2 col-form-label">Request Deadline:</label>
+                    <div class="col-sm-10">
+                        <input id="deadline" name="deadline" class="form-control" type="text" placeholder="yyyy-mm-dd" value="<?php echo $_POST["deadline"]; ?>" />
+                    </div>
+                </div>
                 <div class="mb-3 row">
                     <label for="projectName" class="col-sm-2 col-form-label">Project Name:</label>
                     <div class="col-sm-10">
@@ -386,21 +408,7 @@ if (mysqli_num_rows($check)>0) {
         </div>
         <div class="req_service_wrapper">
             <table class="req_service_table">
-                <!--
-                <tr class="req_service_head">
-                    <th style="width: 50px;">No.</th>
-                    <th>Project Name</th>
-                    <th>Project Role</th>
-                    <th>Location</th>
-                    <th>Level of Expertise</th>
-                    <th>Skill Set</th>
-                    <th>Time Period</th>
-                    <th>Commercial/Functional weight</th>
-                    <th>Detailed Task Description</th>
-                    <th>Comments</th>
-                </tr>
-                -->
-
+              
                 <tr class="req_service_body">
                 <?php
                 $sql = "SELECT * FROM service_requests WHERE Created_by_userid='$userid'";
@@ -420,8 +428,10 @@ if (mysqli_num_rows($check)>0) {
                         <th>Time Period</th>
                         <th>Commercial/Functional weight</th>
                         <th>Detailed Task Description</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Submission_Status</th>
+                        <th>Cycle</th>
+			<th>Deadline</th>
+			<th> Expired Status </th>
                     </tr>';
 
                     while($row = $result->fetch_assoc()) {
@@ -434,7 +444,8 @@ if (mysqli_num_rows($check)>0) {
                         $field6 = $row["duration"];
                         $field7 = $row["weight"];
                         $field8 = $row["taskdescription"];
-                        
+			$field10 = $row["cycle"];
+			$field11 = $row["deadline"];                     
                         
 
                         switch($row["Submission_status"]) {
@@ -458,6 +469,14 @@ if (mysqli_num_rows($check)>0) {
                                 break;
                         }
 
+			 switch($row["expired_status"]) {
+                            case 0:
+                                $field12 = "Valid";
+                                break;
+                            case 1:
+                                $field12 = "Expired";
+                                break;
+                        }
                         echo '<tr>
 				<td>'.$field0.'</td>
                                 <td>'.$field1.'</td> 
@@ -469,7 +488,10 @@ if (mysqli_num_rows($check)>0) {
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
                                 <td>'.$field9.'</td> 
-                                <td> <button class="btn_upload_profile" >View Profile uploaded </button> </td>
+				<td>'.$field10.'</td> 
+				<td>'.$field11.'</td> 
+				<td>'.$field12.'</td>
+                                <!--<td> <button class="btn_upload_profile" >View Profile uploaded </button> </td> -->
                             </tr>';
                                 
                                 "<br>";
