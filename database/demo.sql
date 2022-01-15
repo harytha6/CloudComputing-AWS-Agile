@@ -259,3 +259,16 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` VALUES (1,'software engineer','1'),(6,'Programmer','1'),(7,'Programmer','2');
 
+ALTER TABLE `map_contracts` CHANGE `role_id` `role_name` VARCHAR(255) NULL;
+
+ALTER TABLE `map_contracts` CHANGE `map_id` `map_username` VARCHAR(100) NULL;
+
+ALTER TABLE `map_contracts` ADD `skill_level` INT(3) NOT NULL AFTER `price`;
+
+ALTER TABLE `map_contracts`
+  DROP `bid_status`,
+  DROP `updated_at`,
+  DROP `created_by`,
+  DROP `updated_by`;
+
+ALTER TABLE `service_requests` DROP `role_id`;

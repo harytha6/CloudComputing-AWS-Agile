@@ -11,7 +11,8 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$mapname = $row['full_name'];
+    	$mapnamewithoutformat = $row['full_name'];
+        $mapname = mysqli_real_escape_string($conn, $mapnamewithoutformat);
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -425,15 +426,16 @@ if (mysqli_num_rows($check)>0) {
 					            <th> Expired Status </th>
                     		</tr>';
 		
-		$firstsql = "SELECT * FROM map_contracts WHERE map_id = '$mapid' AND cluster = '1'  ";
+		$firstsql = "SELECT * FROM map_contracts WHERE map_username = '$mapname' AND cluster = '1'  ";
                 
                 $result = $conn->query($firstsql);
 
             if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) 
             {
-			$currentroleid = $row["role_id"];
-			$internalsql = "SELECT * FROM service_requests WHERE role_id = '$currentroleid' AND cycle = '1'  ";
+			$currentrolename = $row["role_name"];
+            $skilllevel = $row["skill_level"];
+			$internalsql = "SELECT * FROM service_requests WHERE role = '$currentrolename' AND skilllevel = '$skilllevel'AND cycle = '1'  ";
 	 	  	$internalresult = $conn->query($internalsql);
 			if ($internalresult->num_rows > 0) 
             {

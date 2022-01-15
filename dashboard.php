@@ -49,10 +49,10 @@ if (isset($_POST["submit"])) {
   $globalid = rand(1000,5000);
   $consumername = mysqli_real_escape_string($conn, $username);
 
-	$roleidsql  = mysqli_query($conn, "SELECT * FROM roles WHERE role_name ='$role' AND skill_level = '$skilllevel' ");
+	$idsql  = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name ='$role' AND skill_level = '$skilllevel' ");
 	 if (mysqli_num_rows($roleidsql) > 0) {
 		$roww = mysqli_fetch_assoc($roleidsql);
-    		$roleidd = $roww['role_id'];
+    		$idd = $roww['role_id'];
 		$roleid = mysqli_real_escape_string($conn, $roleidd);
   	} else {
     	echo "<script>alert('Corresponding contract details not found');</script>";
@@ -63,6 +63,41 @@ if (isset($_POST["submit"])) {
    // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
 $result = mysqli_query($conn, $sql);
 $check = mysqli_query($conn, "SELECT id FROM service_requests WHERE globalid ='$globalid' AND Submission_status = '1' AND role_id = '$roleid' ");
+
+if (mysqli_num_rows($check)>0) {
+    echo "<script>alert('Request submitted successfully');</script>";
+  } else {
+    echo "<script>alert('Submission failed');</script>";
+  }
+}
+
+ if (isset($_POST["save"])) {
+
+    $deadline = mysqli_real_escape_string($conn, $_POST["deadline"]);
+    $role = mysqli_real_escape_string($conn, $_POST["projectRole"]);
+    $skilllevel = mysqli_real_escape_string($conn, $_POST["skilllevel"]);
+    $location = mysqli_real_escape_string($conn, $_POST["location"]);
+    $skillset = mysqli_real_escape_string($conn, $_POST["skillset"]);
+    $duration = mysqli_real_escape_string($conn, $_POST["period"]);
+    $projectname = mysqli_real_escape_string($conn, $_POST["projectName"]);
+    $taskdescription = mysqli_real_escape_string($conn, $_POST["taskdescription"]);
+    $weight = mysqli_real_escape_string($conn, $_POST["function"]);
+    $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
+    $createdbyuserid = $_SESSION["user_id"];
+    $globalid = rand(1000,5000);
+    $consumername = mysqli_real_escape_string($conn, $username);
+
+    $idsql  = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name ='$role' AND skill_level = '$skilllevel' ");
+	 if (mysqli_num_rows($roleidsql) > 0) {
+		$roww = mysqli_fetch_assoc($roleidsql);
+    		$idd = $roww['role_id'];
+		$id = mysqli_real_escape_string($conn, idd);
+  	}  
+  
+      $sql = "INSERT INTO service_requests (role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','0','$username','$globalid')";
+     // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
+$result = mysqli_query($conn, $sql);
+$check = mysqli_query($conn, "SELECT id FROM service_requests WHERE globalid = '$globalid' AND Submission_status = '0'");
 
 if (mysqli_num_rows($check)>0) {
     echo "<script>alert('Request submitted successfully');</script>";
