@@ -11,7 +11,7 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$username = $row['full_name'];	
+    	$username = mysqli_real_escape_string($conn,$row['full_name']);	
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -48,11 +48,12 @@ if (isset($_POST["accept"])) {
 <html>
   <head>
     <link rel="stylesheet" href="statusstyle.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Uploaded Profiles</title>
   </head>
 <body>
 
-<h1>Uploaded Profiles</h1>
+<h1 class="display-6 form__title">Uploaded Profiles</h1>
 
 <table class="content-table">
   <thead>

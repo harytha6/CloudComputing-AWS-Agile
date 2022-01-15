@@ -105,7 +105,7 @@ if (isset($_POST["accept"])) {
         //echo "</table>";
     }
     else {
-        echo "0 results";
+        echo "There are currently no appointed employees";
     }
     ?>
         

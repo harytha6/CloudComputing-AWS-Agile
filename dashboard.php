@@ -11,15 +11,24 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$username = $row['full_name'];
+    $username = $row['full_name'];
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
 
+  //update expired_status for first cycle
 $datesql = "SELECT * FROM service_requests WHERE Created_by_userid='$userid' AND deadline < cast(now() as date) ";
-$dateresult = $conn->query($sql);
+$dateresult = $conn->query($datesql);
 		if ($dateresult->num_rows > 0) {
-			 while($row = $result->fetch_assoc()) {
+			 while($row = $dateresult->fetch_assoc()) {
+				$row["expired_status"] = '1';
+			}			
+		}
+ //update expired_status for second cycle
+$datesql2 = "SELECT * FROM service_requests WHERE Created_by_userid='$userid' AND deadline_new < cast(now() as date) ";
+$dateresult2 = $conn->query($datesql2);
+		if ($dateresult2->num_rows > 0) {
+			 while($row = $dateresult2->fetch_assoc()) {
 				$row["expired_status"] = '1';
 			}			
 		}

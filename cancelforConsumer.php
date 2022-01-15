@@ -42,17 +42,31 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
 <html>
   <head>
     <link rel="stylesheet" href="statusstyle.css">
+    <title> Requested Services</title>
   </head>
 <body>
 
- <div class="request-form-wrapper req_ser form-hide">
-        <div class="form-head">
-            <h1 class="display-6 form__title">Requested Services</h1>
-            <!--<button class="btn btn-dark js-request-form-close btn-desktop" onclick="closeReqServ()">Close</button>
-            <button class="btn-sm btn-dark req_ser_close js-request-form-close btn-mobile">Close</button>-->
-        </div>
-        <div class="req_service_wrapper">
-            <table class="req_service_table">
+<h1>Requested Services</h1>
+
+<table class="content-table">
+            <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Project Role</th>
+                        <th>Location</th>
+                        <th>Level of Expertise</th>
+                        <th>Skill Set</th>
+                        <th>Time Period</th>
+                        <th>Commercial/Functional weight</th>
+                        <th>Detailed Task Description</th>
+                        <th>Consumer name</th>
+                        <th>Status</th>
+                        <th>Cycle</th>
+                        <th>Unique Application Number </th>
+                        <!--<th>Action</th>-->
+                    </tr>
+            </thead>
+            <tbody>        
                 <!--
                 <tr class="req_service_head">
                     <th style="width: 50px;">No.</th>
@@ -67,30 +81,14 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
                     <th>Comments</th>
                 </tr>
                 -->
-
-                <tr class="req_service_body">
                 <?php
-                $sql2 = "SELECT * FROM service_requests";
+                $sql2 = "SELECT * FROM service_requests WHERE NOT Submission_status = '0' ";
                 
                 $result2 = $conn->query($sql2);
 
                 if ($result2->num_rows > 0) {
 
-                    echo '<table border="0" cellspacing="2" cellpadding="20">
-                    <tr class="req_service_head">
-                        <th>Project Name</th>
-                        <th>Project Role</th>
-                        <th>Location</th>
-                        <th>Level of Expertise</th>
-                        <th>Skill Set</th>
-                        <th>Time Period</th>
-                        <th>Commercial/Functional weight</th>
-                        <th>Detailed Task Description</th>
-      <th>Consumer name</th>
-                        <th>Status</th>
-      <th>Unique Application Number </th>
-                        <th>Action</th>
-                    </tr>';
+                    
 
                     while($row = $result2->fetch_assoc()) {
                         $field1 = $row["projectname"];
@@ -102,11 +100,15 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
                         $field7 = $row["weight"];
                         $field8 = $row["taskdescription"];
                         $field9 = $row["created_by"];
-      $field11 = $row["globalid"];
+                        $field11 = $row["globalid"];
+                        $field12 = $row["cycle"];                        
                         
 
                         switch($row["Submission_status"]) {
                           
+                            case 0:
+                                $field10 = "In Creation/Saved for Later";
+                                break;
                             case 1:
                                 $field10 = "Requested";
                                 break;
@@ -118,6 +120,9 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
                                 break;
                             case 4:
                                 $field10 = "Evaluated";
+                                break;
+                            case 5:
+                                $field10 = "Cancelled";
                                 break;
                         }
 
@@ -131,11 +136,12 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
                                 <td>'.$field9.'</td> 
-        <td>'.$field10.'</td>
-        <td>'.$field11.'</td>
-                                <td> <button class="btn_upload_profile" > Upload Profile </button> </td>
-                            </tr>';
+                                <td>'.$field10.'</td>
+                                <td>'.$field12.'</td>
+                                <td>'.$field11.'</td>
                                 
+                            </tr>';
+                                //<td> <button class="btn_upload_profile" > Upload Profile </button> </td>
                                 "<br>";
                     }
 
@@ -145,8 +151,8 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
                     echo "0 results";
                 }
                 ?>
-                </tr>
-            </table>
+             </tbody>
+    </table>
         </div>
     </div>
 
@@ -156,9 +162,9 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
                 <div class="mb-3 row">
-                    <label for="globalid" class="col-sm-2 col-form-label">Global ID:</label>
+                    <label for="globalid" class="col-sm-2 col-form-label">Enter Unique Application Number to Cancel:</label>
                     <div class="col-sm-10">
-                        <input id="gloablid" name="globalid" class="form-control" type="text" placeholder="Enter the Application Number to cancel the request" value="<?php echo $_POST["globalid"]; ?>" required />
+                        <input id="gloablid" name="globalid" class="form-control" type="text" placeholder="Application Number" value="<?php echo $_POST["globalid"]; ?>" required />
                     </div>
                 </div>
     <div class="form-input-actions">                

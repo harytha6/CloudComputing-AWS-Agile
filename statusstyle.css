@@ -64,7 +64,7 @@ h1 {
   left: 0;
 }
 
-form {
+/*form {
   display: flex;
   align-items: left;
   justify-content: center;
@@ -74,7 +74,7 @@ form {
   overflow: hidden;
   grid-column: 1 / 2;
   grid-row: 1/2;
-}
+}*/
 
 .input-field {
   max-width: 380px;

@@ -16,6 +16,23 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
 
+//update expired_status for first cycle
+$datesql = "SELECT * FROM service_requests WHERE deadline < cast(now() as date) ";
+$dateresult = $conn->query($datesql);
+		if ($dateresult->num_rows > 0) {
+			 while($row = $dateresult->fetch_assoc()) {
+				$row["expired_status"] = '1';
+			}			
+		}
+ //update expired_status for second cycle
+$datesql2 = "SELECT * FROM service_requests WHERE deadline_new < cast(now() as date) ";
+$dateresult2 = $conn->query($datesql2);
+		if ($dateresult2->num_rows > 0) {
+			 while($row = $dateresult2->fetch_assoc()) {
+				$row["expired_status"] = '1';
+			}			
+		}
+
 if (isset($_POST["upload"])) {
 
   $globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
