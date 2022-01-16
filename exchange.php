@@ -11,7 +11,8 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$mapname = $row['full_name'];
+    	$mapnamepre = $row['full_name'];
+        $mapname = mysqli_real_escape_string($conn, $mapnamepre);
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -19,29 +20,16 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   header("Location: dashboardforMAP.php");
   }
   if (isset($_POST["exchange"])) {
-    //header("Location: cancelforMAP.php");
+  $_SESSION["profile_id_exchange"] = mysqli_real_escape_string($conn, $_POST["profileid"]);
   $profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
-  $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' ");
+  $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' AND currentcompany = '$mapname' ");
   if (mysqli_num_rows($check)>0) {
     $row = mysqli_fetch_assoc($check);
-    
-        $_SESSION["global_id"]= $row['globalid'];
+    $_SESSION["global_id_exchange"]= $row['globalid'];
+         header("Location: uploadnewprofile.php");
     } else {
-        echo "<script>alert('No Application number found ');</script>";
-    }
-
-
-
-  $sql = "DELETE FROM mapservice WHERE profileid = '$profileid' ";
-  $result = mysqli_query($conn, $sql);
-  $verify = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid'");
-  if (mysqli_num_rows($verify)== 0) {
-       header("Location: uploadnewprofile.php");
-
-    } else {
-        echo "<script>alert('Deletion failed');</script>";
-    }
-   
+        echo "<script>alert('No Profile found ');</script>";
+    }  
   }
 ?>
 
@@ -73,7 +61,7 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   </thead>
   <tbody>
    <?php
-  $sql = "SELECT * FROM mapservice WHERE agreed_status = '0'"; 
+  $sql = "SELECT * FROM mapservice WHERE agreed_status = '0' AND NOT submission_status = '5' AND currentcompany = '$mapname' "; 
   
       $result = $conn-> query($sql);
 

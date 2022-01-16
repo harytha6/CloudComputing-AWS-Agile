@@ -49,19 +49,19 @@ if (isset($_POST["upload"])) {
 
 
     $sql = "INSERT INTO mapservice (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments,price,employeeid) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapname','$language','$comments','$price','$employeeid')";
-$result = mysqli_query($conn, $sql);
-$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' AND employeeid= '$employeeid' ");
+    $result = mysqli_query($conn, $sql);
+    $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' AND employeeid= '$employeeid' ");
 
-if (mysqli_num_rows($check)>0) {
-	$status = mysqli_query($conn, "SELECT * FROM service_request WHERE globalid='$globaid' ");
+    if (mysqli_num_rows($check)>0) {
+	    $status = mysqli_query($conn, "SELECT * FROM service_request WHERE globalid='$globaid' ");
     	$row = mysqli_fetch_assoc($status);
     	$username = $row['created_by'];
-	$profileid = $row['profileid'];
-	$statusupdate = mysqli_query($conn, "UPDATE `mapservice` SET `created_by` = '$username' WHERE profileid = '$profileid' ");
-    echo "<script>alert('Profile uploaded successfully');</script>";
-  } else {
-    echo "<script>alert('Upload failed');</script>";
-  }
+	    $profileid = $row['profileid'];
+	    $statusupdate = mysqli_query($conn, "UPDATE `mapservice` SET `created_by` = '$username' WHERE profileid = '$profileid' ");
+        echo "<script>alert('Profile uploaded successfully');</script>";
+        } else {
+            echo "<script>alert('Upload failed');</script>";
+        }
 
             $sql = "UPDATE `service_requests` SET `Submission_status` = '2' WHERE globalid = '$globalid' ";
             $result = mysqli_query($conn, $sql);

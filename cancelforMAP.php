@@ -11,8 +11,9 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$mapname = $row['full_name'];
-	$mapcluster = $row['cluster'];
+    	$mapnamepre = $row['full_name'];
+        $mapname = mysqli_real_escape_string($conn, $mapnamepre);
+	    $mapcluster = $row['cluster'];
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -21,16 +22,36 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   }
   if (isset($_POST["cancel"])) {
   $profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
- 
-  $sql = "UPDATE `mapservice` SET `submission_status`='5' WHERE profileid='$profileid' "; //AND NOT deadline = '0';
-  $result = mysqli_query($conn, $sql);
-  $verify = mysqli_query($conn, "SELECT * FROM `mapservice` WHERE `profileid`='$profileid' AND `submission_status`='5'");  
-  if (mysqli_num_rows($verify)>0) {
-       echo "<script>alert('Profile Cancelled');
-       window.location = 'dashboardforMAP.php';
-       </script>";
+  $sql3 = "SELECT * FROM mapservice WHERE profileid = '$profileid' "; 
+  $resultp = mysqli_query($conn, $sql3);
+  if (mysqli_num_rows($resultp)>0) {
+       $row = mysqli_fetch_assoc($resultp);
+       $globalid = mysqli_real_escape_string($conn, $row['globalid']);
     } else {
-        echo "<script>alert('Profile cancellation failed');</script>";
+        echo "<script>alert('Profile status changed. Cannot cancel now');</script>";
+    }
+    $sql4 = "SELECT * FROM service_requests WHERE globalid = '$globalid' "; 
+    $resultq = mysqli_query($conn, $sql4);
+    if (mysqli_num_rows($resultq)>0) {
+        $row = mysqli_fetch_assoc($resultq);
+        $expiredstatus = mysqli_real_escape_string($conn, $row['expired_status']);
+    } else {
+        echo "<script>alert('Application status changed. Cannot cancel now');</script>";
+    }
+    if($expiredstatus == '0'){
+                $sql = "UPDATE `mapservice` SET `submission_status`='5' WHERE profileid='$profileid' "; //AND NOT deadline = '0';
+                $result = mysqli_query($conn, $sql);
+                $verify = mysqli_query($conn, "SELECT * FROM `mapservice` WHERE `profileid`='$profileid' AND `submission_status`='5'");  
+                if (mysqli_num_rows($verify)>0) {
+                    echo "<script>alert('Profile Cancelled');
+                    window.location = 'dashboardforMAP.php';
+                    </script>";
+                } else {
+                    echo "<script>alert('Profile cancellation failed');</script>";
+                }
+    }
+    else{
+        echo "<script>alert('Deadline expired. Cannot Cancel now');</script>";
     }
 
   }
@@ -64,14 +85,13 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   </thead>
   <tbody>
    <?php
-  $sql2 = "SELECT * FROM mapservice"; 
+  $sql2 = "SELECT * FROM mapservice WHERE currentcompany = '$mapname' "; 
   
       $result2 = $conn-> query($sql2);
 
     if ($result2-> num_rows > 0) {
         while ($row = $result2-> fetch_assoc()) {
-                $field1 = $row["profileid"];
-
+                        $field1 = $row["profileid"];
                         $field2 = $row["currentcompany"];
                         $field3 = $row["employeename"];
                         $field4 = $row["location"];
@@ -80,10 +100,27 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
                         $field7 = $row["durationavailablefor"];
                         $field8 = $row["language"];
                         $field9 = $row["comments"];
-      $field10 = $row["price"];
-      $field11 = $row["profileuploadedon"];
-      $field12 = $row["submission_status"];
-  echo '<tr>
+                        $field10 = $row["price"];
+                        $field11 = $row["profileuploadedon"];
+                        switch($row["submission_status"])
+                                    {
+                            		case 1:
+                               			$field12 = "Requested";
+                                		break;
+                            		case 2:
+                               			$field12 = "Profile Uploaded";
+                                		break;
+                            		case 3:
+                                		$field12 = "Appointed";
+                                		break;
+                            		case 4:
+                                		$field12 = "Evaluated";
+                                		break;
+                                    case 5:
+                                		$field12 = "Cancelled";
+                                		break;
+                                    }
+                            echo '<tr>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -93,9 +130,9 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
                                 <td>'.$field9.'</td> 
-        <td>'.$field10.'</td>
-        <td>'.$field11.'</td>
-        <td>'.$field12.'</td>
+                                <td>'.$field10.'</td>
+                                <td>'.$field11.'</td>
+                                <td>'.$field12.'</td>
                             </tr>';
                                 
                                 "<br>";
