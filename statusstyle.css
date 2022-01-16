@@ -6,6 +6,7 @@
 
 h1 {
   font-size: 24px;
+  font-weight: 200;
   color: #666666;
 }
 
@@ -23,7 +24,7 @@ h1 {
   background-color: #b3b3ff;
   color: #666666;
   text-align: left;
-  /*font-weight: bold;*/
+  font-weight: 100;
 }
 
 .content-table th,
@@ -44,7 +45,7 @@ h1 {
 }
 
 .content-table tbody tr.active-row {
-  /*font-weight: bold;*/
+  font-weight: 100;
   color: #009879;
 }
 
@@ -102,14 +103,14 @@ h1 {
   outline: none;
   border: none;
   line-height: 1;
-  font-weight: 600;
+  font-weight: 300;
   font-size: 1rem;
   color: #333;
 }
 
 .input-field input::placeholder {
   color: #aaa;
-  font-weight: 500;
+  font-weight: 300;
 }
 
 .btn {
@@ -122,7 +123,7 @@ h1 {
   /* display: block; */
   color: #fff;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 400;
   margin: 10px 0;
   cursor: pointer;
   transition: 0.5s;

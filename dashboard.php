@@ -201,6 +201,10 @@ if (mysqli_num_rows($check)>0) {
             .form__title {
                 font-size: 24px;
             }
+            .form__smalltext {
+                font-size: 12px;
+                color: #666666;
+            }
 
             .btn-desktop {
                 display: none;
@@ -426,10 +430,9 @@ if (mysqli_num_rows($check)>0) {
                 </div>
                 <div class="form-input-actions">                
                     <div id="actionButtons">
-                        <button class="btn btn-secondary js-reset-service-form">Reset</button>
-                        <input type="submit" class="btn" name="submit" value="Submit" />
-                        <input type="submit" class="btn" name="save" value="Save Draft for Later" />
-                        <button class="btn btn-dark js-request-form-close btn-desktop" onclick="template.php">Copy Template</button>
+                        <!--<button class="btn btn-secondary js-reset-service-form">Reset</button>-->
+                        <input type="submit" class="btn btn-dark" name="submit" value="Submit" />
+                        <input type="submit" class="btn btn-dark" name="save" value="Save Draft for Later" />
                     </div>
                 </div>
             </div>
@@ -529,7 +532,7 @@ if (mysqli_num_rows($check)>0) {
 				                <td>'.$field10.'</td> 
 				                <td>'.$field11.'</td> 
 				                <td>'.$field12.'</td>
-                                <td> <button class="btn btn-light" onclick="copyTemplate(' .$field0. ')" > Copy Template </button> </td> 
+                                <td> <button class="btn btn-light" onclick="copyTemplate()" > Copy Template </button> </td> 
                             </tr>';
                                 
                                 "<br>";
@@ -543,6 +546,7 @@ if (mysqli_num_rows($check)>0) {
                 ?>
                 </tr>
             </table>
+            <h6>** Copy Application Number of the desired row and then click on Copy Template button</h6>
         </div>
     </div>
     
@@ -597,20 +601,8 @@ if (mysqli_num_rows($check)>0) {
         }
 
         //Function to navigate to Copy Template
-        function copyTemplate (x){
-        <?php
-            include 'config.php';
-            $sql = "UPDATE `service_requests` SET `template_status` = '1' WHERE globalid = '$x' ";
-	        $result = mysqli_query($conn, $sql);
-
-	        $verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$x' AND template_status = '1' ");
-	        if (mysqli_num_rows($verify)>0) {
-   		        //echo "<script>alert('Draft Submitted Successfully as New Service Request');</script>";
-  	        } else {
-    		   // echo "<script>alert('Draft Submission failed');</script>";
-  	        }
-        ?>
-        // window.location.href = "template.php";
+        function copyTemplate (){
+            window.location.href = "savetemplate.php";
         }
 
         _init();

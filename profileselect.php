@@ -53,7 +53,7 @@ if (isset($_POST["accept"])) {
   </head>
 <body>
 
-<h1 class="display-6 form__title">Currently Available Profiles</h1>
+<h1>Currently Available Profiles</h1>
 
 <table class="content-table">
   <thead>
@@ -135,7 +135,7 @@ if (isset($_POST["accept"])) {
                 <div class="mb-3 row">
                     <label for="profileid" class="col-sm-2 col-form-label">Profile ID:</label>
                     <div class="col-sm-10">
-                        <input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter the Profile ID to select" value="<?php echo $_POST["profileid"]; ?>" required />
+                        <input id="profileid" name="profileid" class="form-control" type="text" placeholder="Profile ID to select" value="<?php echo $_POST["profileid"]; ?>" required />
                     </div>
                 </div>
 		<div class="form-input-actions">                
