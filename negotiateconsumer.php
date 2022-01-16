@@ -27,19 +27,55 @@ if (isset($_POST["negotiate"])) {
   	$profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
 	$negotiateprice = mysqli_real_escape_string($conn, $_POST["negotiateprice"]);
 
-	$sql = "UPDATE `mapservice` SET `negotiateprice` = '$negotiateprice' WHERE profileid = '$profileid' AND agreed_status = '0' AND NOT submission_status = '5'  ";
-	$result = mysqli_query($conn, $sql);	
+    //checking if price falls within range in contract
+    $sqlcheck = "SELECT * FROM mapservice WHERE profileid = '$profileid' AND agreed_status = '0' AND NOT submission_status = '5' ";
+  	$resultcheck = $conn-> query($sqlcheck);
+    if ($resultcheck-> num_rows > 0) {
+        $temprow = $resultcheck-> fetch_assoc();
+        $tempskilllevel = $temprow["skilllevel"];
+        $tempmapname = $temprow["currentcompany"];
+        $tempglobalid = $temprow["globalid"];
+        $tempget = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$tempglobalid' AND Submission_status = '2' AND expired_status = '0' ");
+			        if (mysqli_num_rows($tempget)>0) {
+				        $temprows = mysqli_fetch_assoc($tempget);
+                        $rolepre= $temprows['role'];
+                        $temprole = mysqli_real_escape_string($conn,$rolepre);
+                        $cyclepre = $temprows['cycle'];
+                        $tempcycle = mysqli_real_escape_string($conn,$cyclepre);
+                    }
+                    else {
+                        echo "<script>alert('Application status has changed');</script>";
+                    }
+                    $tempmaxpricesql = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name = '$temprole' AND skill_level = '$tempskilllevel' AND map_username = '$tempmapname' AND cluster = '$tempcycle' ");
+                         if (mysqli_num_rows($tempmaxpricesql)>0) {
+                            $rowss = mysqli_fetch_assoc($tempmaxpricesql);
+                            $tempmaxprice = $rowss["price"];
+                         }
+                         else {
+                              echo "<script>alert('No info in Contract');</script>";
+                         }
+                    if($negotiateprice<= $tempmaxprice) {   
+	                    $sqlfinal = "UPDATE `mapservice` SET `negotiateprice` = '$negotiateprice' WHERE profileid = '$profileid' AND agreed_status = '0' AND NOT submission_status = '5' ";
+	                    $resultfinal = mysqli_query($conn, $sqlfinal);	
 
-	$verify = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND negotiateprice = '$negotiateprice' ");
-	if (mysqli_num_rows($verify)>0) {
-			/*  Add code to send email to MAP notifying that there has been a new negotiated price offered
+	                    $verifyfinal = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND negotiateprice = '$negotiateprice' ");
+	                    if (mysqli_num_rows($verifyfinal)>0) {
+			            /*  Add code to send email to MAP notifying that there has been a new negotiated price offered
 
-*/
-   		 echo "<script>alert('Price sent for Negotiation');</script>";
-  	} else {
-    		echo "<script>alert('Negotiation failed');</script>";
-  	}
-	
+                        */
+   		                echo "<script>alert('Price sent for Negotiation');</script>";
+  	                    } else {
+    		                  echo "<script>alert('Negotiation failed');</script>";
+  	                    }
+                    }
+                    else{
+                        echo "<script>alert('Negotiation price exceeded the price allowed as per contract. Negotiation failed');</script>";                 
+                    }
+
+    }
+    else {
+	    echo "<script>alert('Profile not found in MAP database/ Profile Status has changed');</script>";
+    }	
 };
 
 ?>
@@ -85,7 +121,7 @@ if (isset($_POST["negotiate"])) {
                     $field7pre = $row["skilllevel"];
                     $field7 = mysqli_real_escape_string($conn,$field7pre);
 			        $field2post = mysqli_real_escape_string($conn,$field2);
-			        $roleverify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$field2post' AND Submission_status = '2' ");
+			        $roleverify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$field2post' AND Submission_status = '2' AND expired_status = '0' ");
 			        if (mysqli_num_rows($roleverify)>0) {
 				        $rows = mysqli_fetch_assoc($roleverify);
     				    $field6pre = $rows['role'];
@@ -126,11 +162,11 @@ if (isset($_POST["negotiate"])) {
                                 <td>'.$field11.'</td>
             </tr>';
                                 
-                                "<br>";
-	     }
+            "<br>";
+	    }
 	
-	$result->free();
-	$roleverify->free();
+	    $result->free();
+	    $roleverify->free();
 
         //echo "</table>";
     }
@@ -151,13 +187,13 @@ if (isset($_POST["negotiate"])) {
                 <div class="mb-3 row">
                     <label for="profileid" class="col-sm-2 col-form-label">Profile ID:</label>
                     <div class="col-sm-10">
-                        <input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter the Profile ID for whom to negotiate price" value="<?php echo $_POST["profileid"]; ?>" required />
+                        <input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter Profile ID" value="<?php echo $_POST["profileid"]; ?>" required />
                     </div>
                 </div>
 		<div class="mb-3 row">
                     <label for="negotiateprice" class="col-sm-2 col-form-label"> Negotiate Price for (in Euro):</label>
                     <div class="col-sm-10">
-                        <input id="negotiateprice" name="negotiateprice" class="form-control" type="text" placeholder="Enter the price (without comma, dot) to enter into negotiation with MAP" value="<?php echo $_POST["negotiateprice"]; ?>" required />
+                        <input id="negotiateprice" name="negotiateprice" class="form-control" type="text" placeholder="Enter price (without ',')" value="<?php echo $_POST["negotiateprice"]; ?>" required />
                     </div>
                 </div>
 		<div class="form-input-actions">                
