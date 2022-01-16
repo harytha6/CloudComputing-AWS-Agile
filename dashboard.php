@@ -447,6 +447,9 @@ if (mysqli_num_rows($check)>0) {
             <button class="btn btn-dark js-request-form-close btn-desktop" onclick="closeReqServ()">Close</button>
             <button class="btn-sm btn-dark req_ser_close js-request-form-close btn-mobile">Close</button>
         </div>
+        <div>
+            <h6>** Copy Application Number of the desired row and then click on Copy Template button</h6>
+        </div>
         <div class="req_service_wrapper">
             <table class="req_service_table">
               
@@ -547,7 +550,6 @@ if (mysqli_num_rows($check)>0) {
                 ?>
                 </tr>
             </table>
-            <h6>** Copy Application Number of the desired row and then click on Copy Template button</h6>
         </div>
     </div>
     

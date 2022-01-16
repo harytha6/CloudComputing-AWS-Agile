@@ -62,6 +62,15 @@ if (mysqli_num_rows($check)>0) {
   } else {
     echo "<script>alert('Upload failed');</script>";
   }
+
+            $sql = "UPDATE `service_requests` SET `Submission_status` = '2' WHERE globalid = '$globalid' ";
+            $result = mysqli_query($conn, $sql);
+            $verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '2' ");
+	            if (mysqli_num_rows($verify)>0) {
+   		            //echo "<script>alert('Profile selected');</script>";
+  	            } else {
+    		        echo "<script>alert('Upload will not be reflected on Consumer side');</script>";
+  	            }
 };
 
 ?>

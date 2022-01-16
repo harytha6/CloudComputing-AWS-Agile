@@ -11,7 +11,8 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$mapname = $row['full_name'];
+    	$mapnamepre = $row['full_name'];
+        $mapname = mysqli_real_escape_string ($conn,$mapnamepre);
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -19,16 +20,18 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   header("Location: dashboardforMAP.php");
   }
   if (isset($_POST["upload"])) {
-   /* $profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
-    $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' ");
-    if (mysqli_num_rows($check)>0) {
-        $row = mysqli_fetch_assoc($check);
-            $globalid = $row['globalid'];
+   
+    $globalid = mysqli_real_escape_string ($conn,$_POST["globalid"]);
+    $getdetails = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid ='$globalid' AND expired_status= '0' ");
+    if (mysqli_num_rows($getdetails)>0) {
+        $getrow = mysqli_fetch_assoc($getdetails);
+            $temprole= $getrow['role'];
+            $tempskilllevel= $getrow['skilllevel'];
+            $tempcycle= $getrow['cycle'];
         } else {
-            echo "<script>alert('No Application number found ');</script>";
-        }*/
-  //$globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
-  $globalid = mysqli_real_escape_string ($conn,$_POST["globalid"]);
+            echo "<script>alert('No Application found / Application status changed ');</script>";
+        }
+
   $mapnamenew = mysqli_real_escape_string ($conn, $mapname);
   $employeename = mysqli_real_escape_string($conn, $_POST["employeename"]);
   $employeeid = mysqli_real_escape_string($conn, $_POST["employeeid"]);
@@ -39,20 +42,38 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   $language = mysqli_real_escape_string($conn, $_POST["language"]);
   $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
   $price = mysqli_real_escape_string($conn, $_POST["price"]);
-   
-    $sql = "INSERT INTO `mapservice` (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments, price, employeeid) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapnamenew','$language','$comments','$price','$employeeid')";
-     
-$result = mysqli_query($conn, $sql);
-$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalidd' AND submission_status= '2' ");
 
-if (mysqli_num_rows($check)>0) {
- echo "<script>alert('Profile uploaded successfully');
-  window.location = 'dashboardforMAP.php';
-       </script>";
-  } else {
-    echo "<script>alert('Upload failed');</script>";
-  }
-
+  $pricesql = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name = '$temprole' AND skill_level = '$tempskilllevel' AND map_username = '$mapname' AND cluster = '$tempcycle' ");
+                         if (mysqli_num_rows($pricesql)>0) {
+                            $rowss = mysqli_fetch_assoc($pricesql);
+                            $maxprice = $rowss["price"];
+                         }
+                         else {
+                            echo "<script>alert('No information in contract');</script>";
+                         }
+    if($price<=$maxprice){
+            $sql = "INSERT INTO `mapservice` (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments, price, employeeid) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapnamenew','$language','$comments','$price','$employeeid')";
+            $result = mysqli_query($conn, $sql);
+            $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalidd' AND submission_status= '2' AND employeeid = '$employeeid' ");
+            if (mysqli_num_rows($check)>0) {
+                echo "<script>alert('Profile uploaded successfully');
+                window.location = 'dashboardforMAP.php';
+                </script>";
+            } else {
+                echo "<script>alert('Upload failed');</script>";
+            }
+            $sql = "UPDATE `service_requests` SET `Submission_status` = '2' WHERE globalid = '$globalid' ";
+            $result = mysqli_query($conn, $sql);
+            $verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '2'  ");
+	            if (mysqli_num_rows($verify)>0) {
+   		            //echo "<script>alert('Profile selected');</script>";
+  	            } else {
+    		        echo "<script>alert('Upload will not be reflected on Consumer side');</script>";
+  	            }
+    }
+     else {
+                echo "<script>alert('Price exceeded price in contract');</script>";
+            }
   };
 ?>
 
@@ -69,41 +90,51 @@ if (mysqli_num_rows($check)>0) {
 <table class="content-table">
   <thead>
     <tr>
-  			<th> Unique Application Number </th>
+  			            <th>Unique Application Number </th>
                         <th>Project Name</th>
                         <th>Project Role</th>
                         <th>Location</th>
                         <th>Level of Expertise</th>
                         <th>Skill Set</th>
                         <th>Time Period</th>
+                        <th>Commercial/Functional weight</th>
+                        <th>Detailed Task Description</th>
+					    <th>Comments</th>
                         <th>Submission_Status</th>
                         <th>Cycle</th>
-			<th>Deadline</th>
-			<th> Expired Status </th>
+			            <th>Deadline</th>
+                        <th> Max price as per contract </th>
     </tr>
   </thead>
   <tbody>
    <?php
-  $sql = "SELECT * FROM service_requests WHERE created_by = '$username' AND cycle = '2' ";
+  $sql = "SELECT * FROM service_requests WHERE cycle = '2' AND expired_status = '0' ";
   
       $result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
-        while ($row = $result-> fetch_assoc()) {
-                $field1 = $row["profileid"];
-
-                        $field2 = $row["currentcompany"];
-                        $field3 = $row["employeename"];
-                        $field4 = $row["location"];
-                        $field5 = $row["skillset"];
-                        $field6 = $row["skilllevel"];
-                        $field7 = $row["durationavailablefor"];
-                        $field8 = $row["language"];
-                        $field9 = $row["comments"];
-      $field10 = $row["price"];
-      $field11 = $row["profileuploadedon"];
-      $field12 = $row["globalid"];
-  echo '<tr>
+        while ($introw = $result-> fetch_assoc()) {
+                        $field0 = $introw["globalid"];
+                        $field1 = $introw["projectname"];
+                        $field2 = $introw["role"];
+                        $temprole = mysqli_real_escape_string ($conn, $field2);
+                        $field3 = $introw["location"];
+                        $field4 = $introw["skilllevel"];
+                        $tempskilllevel = mysqli_real_escape_string ($conn, $field4);
+                        $field5 = $introw["skillset"];
+                        $field6 = $introw["duration"];
+                        $field7 = $introw["weight"];
+                        $field8 = $introw["taskdescription"];
+						$field9 = $introw["comments"];
+						$field11 = $introw["cycle"];
+                        $tempcycle = mysqli_real_escape_string ($conn, $field11);
+						$field12 = $introw["deadline_new"];
+                        $visiblesql = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name = '$temprole' AND skill_level = '$tempskilllevel' AND map_username = '$mapname' AND cluster = '$tempcycle' ");
+                         if (mysqli_num_rows($visiblesql)>0) {
+                            $rowss = mysqli_fetch_assoc($visiblesql);
+                            $field13 = $rowss["price"];
+                            echo '<tr>
+                                <td>'.$field0.'</td>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
@@ -113,12 +144,18 @@ if (mysqli_num_rows($check)>0) {
                                 <td>'.$field7.'</td> 
                                 <td>'.$field8.'</td> 
                                 <td>'.$field9.'</td> 
-        <td>'.$field10.'</td>
-        <td>'.$field11.'</td>
-        <td>'.$field12.'</td>
+                                <td>'.$field10.'</td>
+                                <td>'.$field11.'</td>
+                                <td>'.$field12.'</td>
+                                <td>'.$field13.'</td>
                             </tr>';
                                 
-                                "<br>";
+                            "<br>";
+                         }
+                         else {
+                              //echo nothing; 
+                         }
+                    
   }
   $result->free();
         //echo "</table>";
@@ -135,7 +172,7 @@ if (mysqli_num_rows($check)>0) {
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">
                 <div class="mb-3 row">
-                    <label for="globalid" class="col-sm-2 col-form-label">Global ID:</label>
+                    <label for="globalid" class="col-sm-2 col-form-label">Unique Application Number (from above):</label>
                     <div class="col-sm-10">
                         <input id="globalid" name="globalid" class="form-control" type="text" value="<?php echo $_POST["globalid"]; ?>" required />
                     </div>
@@ -151,7 +188,7 @@ if (mysqli_num_rows($check)>0) {
                 <div class="mb-3 row">
                     <label for="employeeid" class="col-sm-2 col-form-label">Employee ID:</label>
                     <div class="col-sm-10">
-                        <input id="employeeid" name="employeeid" class="form-control" type="text" placeholder="Enter the Employee ID" value="<?php echo $_POST["employeeid"]; ?>"  />
+                        <input id="employeeid" name="employeeid" class="form-control" type="text" placeholder="Enter the Employee ID" value="<?php echo $_POST["employeeid"]; ?>" required />
                     </div>
                 </div>
             
@@ -177,7 +214,7 @@ if (mysqli_num_rows($check)>0) {
                 </div>
              
                 <div class="mb-3 row">
-                    <label for="duration" class="col-sm-2 col-form-label">Duration:</label>
+                    <label for="duration" class="col-sm-2 col-form-label">Duration available for:</label>
                     <div class="col-sm-10">
                         <input id="duration" name="duration" class="form-control" type="text" placeholder="Enter the Duration" value="<?php echo $_POST["duration"]; ?>" />
                     </div>
@@ -205,7 +242,7 @@ if (mysqli_num_rows($check)>0) {
                 </div>  
     <div class="form-input-actions">                
                     <div id="actionButtons">
-                        <input type="submit" class="btn" name="upload" value="Upload another Profile" />
+                        <input type="submit" class="btn" name="upload" value="Upload Profile for 2nd cycle" />
                     </div>
                 </div>
             </div>

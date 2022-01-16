@@ -52,7 +52,7 @@ if (isset($_POST["Submit"])) {
   </head>
 <body>
 
-<h1>Uploaded Profiles</h1>
+<h1>Questions posted by MAP</h1>
 
 <table class="content-table">
   <thead>
@@ -118,7 +118,7 @@ if (isset($_POST["Submit"])) {
   </tbody>
 </table>
 
-<h1>Select Profiles</h1>
+<h1>Send Response</h1>
 	
 	<form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->

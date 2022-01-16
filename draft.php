@@ -20,27 +20,15 @@ if (isset($_POST["back"])) {
   header("Location: dashboard.php");
 }
 
-if (isset($_POST["submitdraft"])) {
-
+if (isset($_POST["editdraft"])) {
+    $_SESSION["globalidfordraft"] = mysqli_real_escape_string($conn, $_POST["globalid"]);
   	$globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
-	$check = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid ='$globalid' ");
+	$check = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid ='$globalid' AND Submission_status = '0' ");
 	if (mysqli_num_rows($check)>0) {
-		$row = mysqli_fetch_assoc($check);
-    		$globalid = $row['globalid'];
+        header("Location: editdraft.php");	
   	} else {
-    		echo "<script>alert('No Application number found ');</script>";
+    		echo "<script>alert('No draft currently found ');</script>";
   	}
-
-	$sql = "UPDATE `service_requests` SET `Submission_status` = '1' WHERE globalid = '$globalid' ";
-	$result = mysqli_query($conn, $sql);
-
-	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '1' ");
-	if (mysqli_num_rows($verify)>0) {
-   		 echo "<script>alert('Draft Submitted Successfully as New Service Request');</script>";
-  	} else {
-    		echo "<script>alert('Draft Submission failed');</script>";
-  	}
-	
 };
 
 ?>
@@ -164,7 +152,7 @@ if (isset($_POST["submitdraft"])) {
                 </div>
 		<div class="form-input-actions">                
                     <div id="actionButtons">
-                        <input type="submit" class="btn" name="submitdraft" value="Submit Draft" />
+                        <input type="submit" class="btn" name="editdraft" value="Edit Draft" />
                     </div>
                 </div>
             </div>

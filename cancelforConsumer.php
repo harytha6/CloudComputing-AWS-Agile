@@ -21,7 +21,7 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
   if (isset($_POST["cancel"])) {
   $globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
  
-  $sql = "UPDATE `service_requests` SET `Submission_status`='5' WHERE globalid='$globalid' ";
+  $sql = "UPDATE `service_requests` SET `Submission_status`='5' WHERE globalid='$globalid' AND NOT Submission_status = '3' ";
   $result = mysqli_query($conn, $sql);
   $verify = mysqli_query($conn, "SELECT * FROM `service_requests` WHERE `globalid`='$globalid' AND `Submission_status`='5'");  
   if (mysqli_num_rows($verify)>0) {
@@ -30,7 +30,7 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
        </script>";
        
     } else {
-        echo "<script>alert('Request cancellation failed');</script>";
+        echo "<script>alert('Request cancellation failed / Already employee appointed');</script>";
     }
 
   }

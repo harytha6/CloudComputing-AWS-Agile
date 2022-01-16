@@ -25,10 +25,10 @@ if (isset($_POST["accept"])) {
   	$profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
 	$feedback = mysqli_real_escape_string($conn, $_POST["feedback"]);
 	
-	$sql = "UPDATE mapservice SET `feedback` = '$feedback' WHERE profileid = '$profileid' AND agreed_status = '1' AND submission_status = '3'";
+	$sql = "UPDATE mapservice SET `feedback` = '$feedback' WHERE profileid = '$profileid' AND agreed_status = '1'";
 	$result = mysqli_query($conn, $sql);
 
-	$verify = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND agreed_status = '1' AND submission_status = '3' ");
+	$verify = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND agreed_status = '1' AND feedback = '$feedback' ");
 
 	if (mysqli_num_rows($verify)>0) {
    		 echo "<script>alert('Feedback submitted successfully.');</script>";
@@ -67,7 +67,7 @@ if (isset($_POST["accept"])) {
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '1' AND submission_status = '3' ";
+	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '1' AND submission_status = '4' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {

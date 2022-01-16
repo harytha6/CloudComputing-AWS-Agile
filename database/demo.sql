@@ -272,3 +272,5 @@ ALTER TABLE `map_contracts`
   DROP `updated_by`;
 
 ALTER TABLE `service_requests` DROP `role_id`;
+
+ALTER TABLE `mapservice` ADD `feedback` VARCHAR(255) NOT NULL AFTER `response`;

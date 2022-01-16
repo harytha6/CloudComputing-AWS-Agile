@@ -23,14 +23,6 @@ if (isset($_POST["back"])) {
 if (isset($_POST["savetemplate"])) {
 
   	$globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
-	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' ");
-	if (mysqli_num_rows($check)>0) {
-		$row = mysqli_fetch_assoc($check);
-    		$globalid = $row['globalid'];
-  	} else {
-    		echo "<script>alert('No Application number found ');</script>";
-  	}
-
 	$sql = "UPDATE `service_requests` SET `template_status` = '1' WHERE globalid = '$globalid' ";
 	$result = mysqli_query($conn, $sql);
 

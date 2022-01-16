@@ -43,7 +43,7 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
     $sql = "INSERT INTO `mapservice` (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments, price, employeeid) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapnamenew','$language','$comments','$price','$employeeid')";
      
 $result = mysqli_query($conn, $sql);
-$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalidd' AND submission_status= '2' ");
+$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' AND submission_status= '2' AND employeeid = '$employeeid' ");
 
 if (mysqli_num_rows($check)>0) {
  echo "<script>alert('Profile uploaded successfully');
@@ -152,7 +152,7 @@ if (mysqli_num_rows($check)>0) {
                 <div class="mb-3 row">
                     <label for="employeeid" class="col-sm-2 col-form-label">Employee ID:</label>
                     <div class="col-sm-10">
-                        <input id="employeeid" name="employeeid" class="form-control" type="text" placeholder="Enter the Employee ID" value="<?php echo $_POST["employeeid"]; ?>"  />
+                        <input id="employeeid" name="employeeid" class="form-control" type="text" placeholder="Enter the Employee ID" value="<?php echo $_POST["employeeid"]; ?>" required />
                     </div>
                 </div>
             
