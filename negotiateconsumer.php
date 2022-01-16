@@ -55,50 +55,61 @@ if (isset($_POST["negotiate"])) {
     <tr>
 	<th>Profile ID </th>
 	<th>Unique Application Number </th>
-      	<th>Profile provided by MAP</th>
+    <th>Profile provided by MAP</th>
 	<th>Currently Offered Price by MAP </th>
 	<th>Your Negotiated price </th>
 	<th>Project Role </th>
+    <th>Skill Level </th>
+    <th> Cycle </th>
+    <th> Deadline </th>
 	<th>Negotiaion possible? </th>
     </tr>
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '0' ";
+	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '0' AND NOT submission_status = '5' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {	
         while ($row = $result-> fetch_assoc()) {
             		$field1 = $row["profileid"];
-			$field2 = $row["globalid"];
-                        $field3 = $row["currentcompany"];
-			$field4 = $row["price"];
-			$field5 = $row["negotiateprice"];
-			$field2post = mysqli_real_escape_string($conn,$field2);
-			$roleverify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$field2post' AND NOT Submission_status = '3,4,5' ");
-			if (mysqli_num_rows($roleverify)>0) {
-				$rows = mysqli_fetch_assoc($roleverify);
-    				$field6 = $rows['role'];
-				$field7 = "Can Negotiate";
-  				} else {
-					$field6 = "N/A";
-					$field7 = "Cannot Negotiate. Profile already appointed to other Consumers or Cancelled by MAP";
-    					echo "<script>alert('The Application or Profile you are looking for is no longer available');</script>";
-  				}
+			        $field2 = $row["globalid"];
+                    $field3 = $row["currentcompany"];
+			        $field4 = $row["price"];
+			        $field5 = $row["negotiateprice"];
+                    $field7 = $row["skilllevel"];
+			        $field2post = mysqli_real_escape_string($conn,$field2);
+			        $roleverify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$field2post' AND NOT Submission_status = '3,4,5' ");
+			        if (mysqli_num_rows($roleverify)>0) {
+				        $rows = mysqli_fetch_assoc($roleverify);
+    				    $field6 = $rows['role'];
+                        $field8 = $rows['cycle'];
+                        $field9 = $rows['deadline'];
+				        $field10 = "Can Negotiate";
+  				    } else {
+					    $field6 = "N/A";
+                        $field8 = "N/A";
+                        $field9 = "N/A";
+					    $field10 = "Cannot Negotiate";
+    					//echo "<script>alert('The Application or Profile you are looking for is no longer available');</script>";
+  				    }
 
 		
-	echo '<tr>
+	        echo '<tr>
                                 <td>'.$field1.'</td> 
                                 <td>'.$field2.'</td> 
                                 <td>'.$field3.'</td> 
                                 <td>'.$field4.'</td>
-				<td>'.$field5.'</td> 
-				<td>'.$field6.'</td>
-				<td>'.$field7.'</td>
-                            </tr>';
+				                <td>'.$field5.'</td> 
+				                <td>'.$field6.'</td>
+				                <td>'.$field7.'</td>
+                                <td>'.$field8.'</td>
+                                <td>'.$field9.'</td>
+                                <td>'.$field10.'</td>
+            </tr>';
                                 
                                 "<br>";
-	}
+	     }
 	
 	$result->free();
 	$roleverify->free();
@@ -112,6 +123,7 @@ if (isset($_POST["negotiate"])) {
         
   </tbody>
 </table>
+<h10>** Cannot Negotiate" could be due to : Profile being already appointed to other Consumers or Profile Cancelled by MAP or Application being cancelled by Consumer</h10>
 
 <h1>Negotiate Price</h1>
 	
