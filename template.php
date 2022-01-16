@@ -21,26 +21,16 @@ if (isset($_POST["back"])) {
 }
 
 if (isset($_POST["use"])) {
+  	    $_SESSION["globalidfortemplate"] = mysqli_real_escape_string($conn, $_POST["globalid"]);
+        $globalidfortemplate = mysqli_real_escape_string($conn, $_POST["globalid"]);
+        $load = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalidfortemplate' AND template_status='1' ");
 
-  	$globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
-	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' ");
-	if (mysqli_num_rows($check)>0) {
-		$row = mysqli_fetch_assoc($check);
-    		$globalid = $row['globalid'];
-  	} else {
-    		echo "<script>alert('No Application number found ');</script>";
-  	}
-
-	$sql = "UPDATE `service_requests` SET `Submission_status` = '0' WHERE globalid = '$globalid' ";
-	$result = mysqli_query($conn, $sql);
-
-	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '0' ");
-	if (mysqli_num_rows($verify)>0) {
-   		 echo "<script>alert('Profile selected');</script>";
-  	} else {
-    		echo "<script>alert('Selection failed');</script>";
-  	}
-	
+        if (mysqli_num_rows($load) > 0) {	        
+             header("Location: edittemplate.php");
+        } else {
+             echo "<script>alert('Template with the mentioned global ID not found');</script>";
+        }
+  
 };
 
 ?>
