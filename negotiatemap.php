@@ -86,7 +86,7 @@ if (isset($_POST["negotiate"])) {
   				} else {
 					$field6 = "N/A";
 					$field7 = "Cannot Negotiate. Profile already appointed to other Consumers or Cancelled by MAP";
-    					echo "<script>alert('The Application or Profile you are looking for is no longer available');</script>";
+    					//echo "<script>alert('The Application or Profile you are looking for is no longer available');</script>";
               $field8 = "N/A";   
   				}
 

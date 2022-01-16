@@ -11,7 +11,9 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$username = $row['full_name'];
+    	$usernamepadded = $row['full_name'];
+        $username = mysqli_real_escape_string($conn, $usernamepadded);
+
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -24,7 +26,8 @@ if (isset($_POST["negotiate"])) {
 
   	$profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
 	$negotiateprice = mysqli_real_escape_string($conn, $_POST["negotiateprice"]);
-	$sql = "UPDATE `mapservice` SET `negotiateprice` = '$negotiateprice' WHERE profileid = '$profileid' ";
+
+	$sql = "UPDATE `mapservice` SET `negotiateprice` = '$negotiateprice' WHERE profileid = '$profileid' AND agreed_status = '0' AND NOT submission_status = '5'  ";
 	$result = mysqli_query($conn, $sql);	
 
 	$verify = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND negotiateprice = '$negotiateprice' ");
@@ -60,9 +63,10 @@ if (isset($_POST["negotiate"])) {
 	<th>Your Negotiated price </th>
 	<th>Project Role </th>
     <th>Skill Level </th>
-    <th> Cycle </th>
-    <th> Deadline </th>
+    <th>Cycle </th>
+    <th>Deadline </th>
 	<th>Negotiaion possible? </th>
+    <th>Maximum possible price as per contract </th>
     </tr>
   </thead>
   <tbody>
@@ -74,23 +78,36 @@ if (isset($_POST["negotiate"])) {
         while ($row = $result-> fetch_assoc()) {
             		$field1 = $row["profileid"];
 			        $field2 = $row["globalid"];
-                    $field3 = $row["currentcompany"];
+                    $field3pre = $row["currentcompany"];
+                    $field3 = mysqli_real_escape_string($conn,$field3pre);
 			        $field4 = $row["price"];
 			        $field5 = $row["negotiateprice"];
-                    $field7 = $row["skilllevel"];
+                    $field7pre = $row["skilllevel"];
+                    $field7 = mysqli_real_escape_string($conn,$field7pre);
 			        $field2post = mysqli_real_escape_string($conn,$field2);
-			        $roleverify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$field2post' AND NOT Submission_status = '3,4,5' ");
+			        $roleverify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$field2post' AND Submission_status = '2' ");
 			        if (mysqli_num_rows($roleverify)>0) {
 				        $rows = mysqli_fetch_assoc($roleverify);
-    				    $field6 = $rows['role'];
-                        $field8 = $rows['cycle'];
+    				    $field6pre = $rows['role'];
+                        $field6 = mysqli_real_escape_string($conn,$field6pre);
+                        $field8pre = $rows['cycle'];
+                        $field8 = mysqli_real_escape_string($conn,$field8pre);
                         $field9 = $rows['deadline'];
 				        $field10 = "Can Negotiate";
+                        $maxpricesql = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name = '$field6' AND skill_level = '$field7' AND map_username = '$field3' AND cluster = '$field8' ");
+                         if (mysqli_num_rows($maxpricesql)>0) {
+                            $rowss = mysqli_fetch_assoc($maxpricesql);
+                            $field11 = $rowss["price"];
+                         }
+                         else {
+                              $field11 = "No info in Contract";
+                         }
   				    } else {
 					    $field6 = "N/A";
                         $field8 = "N/A";
                         $field9 = "N/A";
 					    $field10 = "Cannot Negotiate";
+                        $field11 = "N/A";
     					//echo "<script>alert('The Application or Profile you are looking for is no longer available');</script>";
   				    }
 
@@ -106,6 +123,7 @@ if (isset($_POST["negotiate"])) {
                                 <td>'.$field8.'</td>
                                 <td>'.$field9.'</td>
                                 <td>'.$field10.'</td>
+                                <td>'.$field11.'</td>
             </tr>';
                                 
                                 "<br>";
