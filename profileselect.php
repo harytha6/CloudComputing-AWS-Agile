@@ -23,36 +23,35 @@ if (isset($_POST["back"])) {
 if (isset($_POST["accept"])) {
 
   	$profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
-	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' AND NOT Submission_status = '3,4,5' ");
+	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' AND Submission_status = '2' ");
 	if (mysqli_num_rows($check)>0) {
-		$row = mysqli_fetch_assoc($check);
+		    $row = mysqli_fetch_assoc($check);
     		$globalid = $row['globalid'];
-  	} else {
-    		echo "<script>alert('No Application number found ');</script>";
-  	}
-    $expirycheck = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid ='$globalid' AND NOT expired_status = '1' ");
-	if (mysqli_num_rows($check)>0) {
-  	} else {
+            $expirycheck = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid ='$globalid' AND submission_status = '2' AND expired_status = '0' ");
+	        if (mysqli_num_rows($expirycheck)>0) {
+                $sql = "UPDATE `service_requests` SET `Submission_status` = '3' WHERE globalid = '$globalid' ";
+                $sql2 = "UPDATE `mapservice` SET `submission_status` = '3',`agreed_status`='1' WHERE profileid = '$profileid' ";
+
+	            $result = mysqli_query($conn, $sql);
+                $result2 = mysqli_query($conn, $sql2);
+	            $verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '3' ");
+	            if (mysqli_num_rows($verify)>0) {
+   		        echo "<script>alert('Profile selected');</script>";
+  	            } else {
+    		    echo "<script>alert('Selection failed');</script>";
+  	            }
+	            $verify2 = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND submission_status = '3' AND agreed_status = '1'");
+	            if (mysqli_num_rows($verify2)>0) {
+   		            //echo "<script>alert('Profile selected');</script>";
+  	            } else {
+    		        echo "<script>alert('Selection not reflected in MAP Table');</script>";
+  	            }
+  	        } else {
     		echo "<script>alert('The Application, for which this profile was uploaded for, has expired');</script>";
-  	}
-
-	$sql = "UPDATE `service_requests` SET `Submission_status` = '3' WHERE globalid = '$globalid' ";
-    $sql2 = "UPDATE `mapservice` SET `submission_status` = '3',`agreed_status`='1' WHERE profileid = '$profileid' ";
-
-	$result = mysqli_query($conn, $sql);
-    $result2 = mysqli_query($conn, $sql2);
-	$verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '3' ");
-	if (mysqli_num_rows($verify)>0) {
-   		 echo "<script>alert('Profile selected');</script>";
+  	        }
   	} else {
-    		echo "<script>alert('Selection failed');</script>";
-  	}
-	$verify2 = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND submission_status = '3' AND agreed_status = '1'");
-	if (mysqli_num_rows($verify2)>0) {
-   		 //echo "<script>alert('Profile selected');</script>";
-  	} else {
-    		echo "<script>alert('Selection not reflected in MAP Table');</script>";
-  	}
+    		echo "<script>alert('Profile Status has changed ');</script>";
+  	}	
 };
 
 ?>

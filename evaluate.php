@@ -25,10 +25,10 @@ if (isset($_POST["accept"])) {
   	$profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
 	$feedback = mysqli_real_escape_string($conn, $_POST["feedback"]);
 	
-	$sql = "UPDATE mapservice SET `feedback` = '$feedback' WHERE profileid = '$profileid' ";
+	$sql = "UPDATE mapservice SET `feedback` = '$feedback' WHERE profileid = '$profileid' AND agreed_status = '1' AND submission_status = '3'";
 	$result = mysqli_query($conn, $sql);
 
-	$verify = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND agreed_status = '1' ");
+	$verify = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileid' AND agreed_status = '1' AND submission_status = '3' ");
 
 	if (mysqli_num_rows($verify)>0) {
    		 echo "<script>alert('Feedback submitted successfully.');</script>";
@@ -67,7 +67,7 @@ if (isset($_POST["accept"])) {
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '1' ";
+	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '1' AND submission_status = '3' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
@@ -119,7 +119,7 @@ if (isset($_POST["accept"])) {
 			<div class="mb-3 row">
 				<label for="profileid" class="col-sm-2 col-form-label">Profile ID:</label>
 				<div class="col-sm-10">
-					<input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter the Profile ID to select" value="<?php echo $_POST["profileid"]; ?>" required />
+					<input id="profileid" name="profileid" class="form-control" type="text" placeholder="Enter the Profile ID" value="<?php echo $_POST["profileid"]; ?>" required />
 				</div>
 			</div>
 			<div class="mb-3 row">
