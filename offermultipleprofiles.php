@@ -19,17 +19,8 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   header("Location: dashboardforMAP.php");
   }
   if (isset($_POST["upload"])) {
-   /* $profileid = mysqli_real_escape_string($conn, $_POST["profileid"]);
-    $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileid' ");
-    if (mysqli_num_rows($check)>0) {
-        $row = mysqli_fetch_assoc($check);
-            $globalid = $row['globalid'];
-        } else {
-            echo "<script>alert('No Application number found ');</script>";
-        }*/
-  //$globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
   $globalid = mysqli_real_escape_string ($conn,$_POST["globalid"]);
-  $mapnamenew = mysqli_real_escape_string ($conn, $mapname);
+  $mapname = mysqli_real_escape_string ($conn, $mapname);
   $employeename = mysqli_real_escape_string($conn, $_POST["employeename"]);
   $employeeid = mysqli_real_escape_string($conn, $_POST["employeeid"]);
   $location = mysqli_real_escape_string($conn, $_POST["location"]);
@@ -39,19 +30,52 @@ $load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
   $language = mysqli_real_escape_string($conn, $_POST["language"]);
   $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
   $price = mysqli_real_escape_string($conn, $_POST["price"]);
-   
-    $sql = "INSERT INTO `mapservice` (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments, price, employeeid) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapnamenew','$language','$comments','$price','$employeeid')";
+   $verify2 = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND expired_status = '0' ");
+	         if (mysqli_num_rows($verify2)>0) {
+                $rowconsumer = mysqli_fetch_assoc($verify2);
+                $consumername = mysqli_real_escape_string ($conn,$rowconsumer['created_by']);
+                $cycle = mysqli_real_escape_string ($conn,$rowconsumer['cycle']);
+                $role = mysqli_real_escape_string ($conn,$rowconsumer['role']);
+                $skilllevel = mysqli_real_escape_string ($conn,$rowconsumer['skilllevel']);
+                $tempmaxpricesql = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name = '$role' AND skill_level = '$skilllevel' AND map_username = '$mapname' AND cluster = '$cycle' ");
+                         if (mysqli_num_rows($tempmaxpricesql)>0) {
+                            $rowss = mysqli_fetch_assoc($tempmaxpricesql);
+                            $tempmaxprice = $rowss["price"];
+                         }
+                         else {
+                              echo "<script>alert('No info for max price in Contract');</script>";
+                         }
+             if ($price <= $tempmaxprice){
+                    $insertsql = "INSERT INTO mapservice (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments, price, employeeid,created_by) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapname','$language','$comments','$price','$employeeid', '$consumername')";
      
-$result = mysqli_query($conn, $sql);
-$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' AND submission_status= '2' AND employeeid = '$employeeid' ");
+    $result = mysqli_query($conn, $insertsql);
+    $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' AND submission_status= '2' AND employeeid = '$employeeid' ");
 
-if (mysqli_num_rows($check)>0) {
- echo "<script>alert('Profile uploaded successfully');
-  window.location = 'dashboardforMAP.php';
-       </script>";
-  } else {
+    if (mysqli_num_rows($check)>0) {
+        $sql2 = "UPDATE `service_requests` SET `Submission_status` = '2' WHERE globalid = '$globalid' AND expired_status = '0' ";
+        $result2 = mysqli_query($conn, $sql2);
+        $verify2 = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '2' ");
+	    if (mysqli_num_rows($verify2)>0) {
+
+  	    } else {
+    		 echo "<script>alert('Upload will not be reflected on Consumer side');</script>";
+  	    }        
+        
+        echo "<script>alert('Multiple Profile uploaded successfully');
+        window.location = 'dashboardforMAP.php';
+        </script>";
+    } else {
     echo "<script>alert('Upload failed');</script>";
-  }
+    }
+             }
+             else {
+                echo '<script type = "text/javascript">alert("Price exceeded max price in Contract. Enter value less than '.$tempmaxprice.' " );</script>';
+             }
+  	    }
+        else{
+            echo "<script>alert('Application not found/expired');</script>";
+        }
+  
 
   };
 ?>
@@ -85,7 +109,7 @@ if (mysqli_num_rows($check)>0) {
   </thead>
   <tbody>
    <?php
-  $sql = "SELECT * FROM mapservice WHERE currentcompany='$mapname' "; 
+  $sql = "SELECT * FROM mapservice WHERE currentcompany='$mapname'  "; 
   
       $result = $conn-> query($sql);
 
@@ -131,7 +155,8 @@ if (mysqli_num_rows($check)>0) {
         
   </tbody>
 </table>
-  
+ 
+<h1>Upload Multiple Profile</h1>
   <form class="form-container js-form-container" method="post">
             <!-- No id should be same. Change / replace at all occurrences -->
             <div class="form-inputs">

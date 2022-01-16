@@ -46,24 +46,30 @@ if (isset($_POST["upload"])) {
   $language = mysqli_real_escape_string($conn, $_POST["language"]);
   $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
   $price = mysqli_real_escape_string($conn, $_POST["price"]);
+               $verify2 = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND expired_status = '0' ");
+	         if (mysqli_num_rows($verify2)>0) {
+                $rowconsumer = mysqli_fetch_assoc($verify2);
+                $consumername = mysqli_real_escape_string ($conn,$rowconsumer['created_by']);
+                $cycle = mysqli_real_escape_string ($conn,$rowconsumer['cycle']);
+                $role = mysqli_real_escape_string ($conn,$rowconsumer['role']);
+                $skilllevel = mysqli_real_escape_string ($conn,$rowconsumer['skilllevel']);
+                $tempmaxpricesql = mysqli_query($conn, "SELECT * FROM map_contracts WHERE role_name = '$role' AND skill_level = '$skilllevel' AND map_username = '$mapname' AND cluster = '$cycle' ");
+                         if (mysqli_num_rows($tempmaxpricesql)>0) {
+                            $rowss = mysqli_fetch_assoc($tempmaxpricesql);
+                            $tempmaxprice = $rowss["price"];
+                         }
+                         else {
+                              echo "<script>alert('No info for max price in Contract');</script>";
+                         }
+             if ($price <= $tempmaxprice){
 
 
-    $sql = "INSERT INTO mapservice (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments,price,employeeid) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapname','$language','$comments','$price','$employeeid')";
+    $sql = "INSERT INTO mapservice (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments,price,employeeid,created_by) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapname','$language','$comments','$price','$employeeid','$consumername')";
     $result = mysqli_query($conn, $sql);
     $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' AND employeeid= '$employeeid' ");
 
     if (mysqli_num_rows($check)>0) {
-	    $status = mysqli_query($conn, "SELECT * FROM service_request WHERE globalid='$globaid' ");
-    	$row = mysqli_fetch_assoc($status);
-    	$username = $row['created_by'];
-	    $profileid = $row['profileid'];
-	    $statusupdate = mysqli_query($conn, "UPDATE `mapservice` SET `created_by` = '$username' WHERE profileid = '$profileid' ");
-        echo "<script>alert('Profile uploaded successfully');</script>";
-        } else {
-            echo "<script>alert('Upload failed');</script>";
-        }
-
-            $sql = "UPDATE `service_requests` SET `Submission_status` = '2' WHERE globalid = '$globalid' ";
+        $sql = "UPDATE `service_requests` SET `Submission_status` = '2' WHERE globalid = '$globalid' ";
             $result = mysqli_query($conn, $sql);
             $verify = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid='$globalid' AND Submission_status = '2' ");
 	            if (mysqli_num_rows($verify)>0) {
@@ -71,6 +77,18 @@ if (isset($_POST["upload"])) {
   	            } else {
     		        echo "<script>alert('Upload will not be reflected on Consumer side');</script>";
   	            }
+        echo "<script>alert('Profile uploaded successfully');</script>";
+        } else {
+            echo "<script>alert('Upload failed');</script>";
+        }
+         }
+             else {
+                echo '<script type = "text/javascript">alert("Price exceeded max price in Contract. Enter value less than '.$tempmaxprice.' " );</script>';
+             }
+  	    }
+        else{
+            echo "<script>alert('Application not found/expired');</script>";
+        }
 };
 
 ?>
@@ -397,7 +415,7 @@ if (isset($_POST["upload"])) {
                 </div>
                 <div class="form-input-actions">                
                     <div id="actionButtons">
-                        <button class="btn btn-secondary js-reset-service-form">Reset</button>
+                        <!--<button class="btn btn-secondary js-reset-service-form">Reset</button>-->
                         <input type="submit" class="btn" name="upload" value="Upload Profile" />
                     </div>
                 </div>
