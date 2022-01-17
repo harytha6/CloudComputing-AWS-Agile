@@ -11,7 +11,9 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$username = mysqli_real_escape_string($conn,$row['full_name']);	
+    	$usernamepre = $row['full_name'];
+    	$username = mysqli_real_escape_string($conn, $usernamepre);	
+	echo '<script type="text/javascript"> alert("Username is '.$username.' ");</script>';
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }

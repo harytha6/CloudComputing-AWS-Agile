@@ -29,7 +29,7 @@ $load = mysqli_query($conn, "SELECT * FROM map_user WHERE map_id='$mapid' ");
              $location = mysqli_real_escape_string($conn, $_POST["location"]);
              $skilllevel = mysqli_real_escape_string($conn, $_POST["skilllevel"]);
              $skillset = mysqli_real_escape_string($conn, $_POST["skillset"]);
-             $duration = mysqli_real_escape_string($conn, $_POST["period"]);
+             $duration = mysqli_real_escape_string($conn, $_POST["duration"]);
              $language = mysqli_real_escape_string($conn, $_POST["language"]);
              $comments = mysqli_real_escape_string($conn, $_POST["comments"]);
              $price = mysqli_real_escape_string($conn, $_POST["price"]); 

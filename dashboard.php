@@ -51,7 +51,7 @@ if (isset($_POST["submit"])) {
   $consumername = mysqli_real_escape_string($conn, $username);
 
 
-    $sql = "INSERT INTO service_requests (deadline, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$deadline','$role', '$skilllevel' ,'$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1','$consumername','$globalid')";
+    $sql = "INSERT INTO service_requests (deadline, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid,expired_status) VALUES ('$deadline','$role', '$skilllevel' ,'$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','1','$consumername','$globalid','0')";
    // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
 $result = mysqli_query($conn, $sql);
 $check = mysqli_query($conn, "SELECT id FROM service_requests WHERE globalid ='$globalid' AND Submission_status = '1' AND role_id = '$roleid' ");
@@ -79,7 +79,7 @@ if (mysqli_num_rows($check)>0) {
     $globalid = rand(1000,5000);
     $consumername = mysqli_real_escape_string($conn, $username);
 
-      $sql = "INSERT INTO service_requests (deadline, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid) VALUES ('$deadline','$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','0','$username','$globalid')";
+      $sql = "INSERT INTO service_requests (deadline, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight,comments,Created_by_userid,created_at,is_open_for_bidding,cycle,Submission_status,created_by,globalid,expired_status) VALUES ('$deadline','$role', '$skilllevel', '$location','$skillset','$duration','$projectname','$taskdescription','$weight','$comments','$createdbyuserid',current_timestamp,'1','1','0','$username','$globalid','0')";
      // $sql = "INSERT INTO service_requests (id, role, skilllevel, location, skillset, duration, projectname,taskdescription,weight) VALUES ('1001', 'fgu', '2', 'fytfy','ghg','hh','yg','guh','hjh')";    
 $result = mysqli_query($conn, $sql);
 $check = mysqli_query($conn, "SELECT id FROM service_requests WHERE globalid = '$globalid' AND Submission_status = '0'");
@@ -334,7 +334,7 @@ if (mysqli_num_rows($check)>0) {
                 	<li class="nav-item js-service-request-form">
                             <a class="nav-link" href="responseforConsumer.php">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                <span class="ml-2">Send Response</span>
+                                <span class="ml-2"> Answer MAP Questions</span>
                             </a>
     			</li>
 			<li class="nav-item">
