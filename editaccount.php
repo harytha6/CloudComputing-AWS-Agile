@@ -7,11 +7,11 @@ error_reporting(0);
 
 $mapid = mysqli_real_escape_string($conn,$_SESSION["map_id"]);
 
-$load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
+$load = mysqli_query($conn, "SELECT * FROM map_user WHERE map_id='$mapid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$mapnamepre = $row['full_name'];
+    	$mapnamepre = $row['map_user_name'];
         $mapname = mysqli_real_escape_string($conn, $mapnamepre);
 
   } else {
@@ -27,12 +27,12 @@ if (isset($_POST["changeemail"])) {
     $newemail = mysqli_real_escape_string($conn, $_POST["newemail"]);
     $password = mysqli_real_escape_string($conn, $_POST["password"]);
 
-    $verify = mysqli_query($conn, "SELECT * FROM maplogin WHERE email ='$oldemail' AND password = '$password' ");
+    $verify = mysqli_query($conn, "SELECT * FROM map_user WHERE map_user_email ='$oldemail' AND password = '$password' ");
 	         if (mysqli_num_rows($verify)>0) {
 
-                $sql = "UPDATE `maplogin` SET `email` = '$newemail' WHERE `email` = '$oldemail' AND password = '$password' ";
+                $sql = "UPDATE `map_user` SET `map_user_email` = '$newemail' WHERE `map_user_email` = '$oldemail' AND password = '$password' ";
                 $result = mysqli_query($conn, $sql);
-                $verify = mysqli_query($conn, "SELECT * FROM maplogin WHERE email='$newemail' AND password = '$password' ");
+                $verify = mysqli_query($conn, "SELECT * FROM map_user WHERE map_user_email='$newemail' AND password = '$password' ");
 	            if (mysqli_num_rows($verify)>0) {
    		            echo "<script>alert('Email updated successfully');</script>";
   	            } else {
@@ -49,12 +49,12 @@ if (isset($_POST["changepassword"])) {
     $newpassword = mysqli_real_escape_string($conn, $_POST["newpwd"]);
     $repeatpassword = mysqli_real_escape_string($conn, $_POST["repwd"]);
 
-    $verify = mysqli_query($conn, "SELECT * FROM maplogin WHERE email ='$email' AND password = '$oldpassword' ");
+    $verify = mysqli_query($conn, "SELECT * FROM map_user WHERE map_user_email ='$email' AND password = '$oldpassword' ");
 	    if($newpassword==$repeatpassword){    
             if (mysqli_num_rows($verify)>0) {
-                $sql = "UPDATE `maplogin` SET `password` = '$newpassword' WHERE `email` = '$email' AND password = '$oldpassword' ";
+                $sql = "UPDATE `map_user` SET `password` = '$newpassword' WHERE `map_user_email` = '$email' AND password = '$oldpassword' ";
                 $result = mysqli_query($conn, $sql);
-                $verify = mysqli_query($conn, "SELECT * FROM maplogin WHERE email='$email' AND password = '$newpassword' ");
+                $verify = mysqli_query($conn, "SELECT * FROM map_user WHERE map_user_email='$email' AND password = '$newpassword' ");
 	            if (mysqli_num_rows($verify)>0) {
    		            echo "<script>alert('Password updated successfully');</script>";
   	            } else {

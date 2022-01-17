@@ -20,12 +20,20 @@ if (isset($_POST["signinmap"])) {
   $email = mysqli_real_escape_string($conn, $_POST["mapemail"]);
   $password = mysqli_real_escape_string($conn, $_POST["mappassword"]);
 
-  $check_email = mysqli_query($conn, "SELECT id FROM maplogin WHERE email='$email' AND password='$password'");
+  $check_email = mysqli_query($conn, "SELECT * FROM map_user WHERE map_user_email='$email' AND password='$password'");
 
   if (mysqli_num_rows($check_email) > 0) {
     $row = mysqli_fetch_assoc($check_email);
-    $_SESSION["map_id"] = $row['id'];
-    header("Location: dashboardforMAP.php");
+    $_SESSION["map_id"] = $row['map_id'];
+    $activestatus = $row['active_status'];
+    if($activestatus == 1){
+        echo "<script>alert('Login successful');</script>";
+        header("Location: dashboardforMAP.php");
+    }
+    else {
+        echo "<script>alert('Your account has been deactivated. Contact administrator');</script>";
+    }
+    
   } else {
     echo "<script>alert('Login details are incorrect. Please try again.');</script>";
   }

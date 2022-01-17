@@ -7,11 +7,11 @@ error_reporting(0);
 
 $mapid = mysqli_real_escape_string($conn,$_SESSION["map_id"]);
 
-$load = mysqli_query($conn, "SELECT * FROM maplogin WHERE id='$mapid' ");
+$load = mysqli_query($conn, "SELECT * FROM map_user WHERE map_id='$mapid' ");
 
   if (mysqli_num_rows($load) > 0) {
 	$row = mysqli_fetch_assoc($load);
-    	$mapnamepre = $row['full_name'];
+    	$mapnamepre = $row['map_user_name'];
         $mapname = mysqli_real_escape_string($conn, $mapnamepre);
 
   } else {

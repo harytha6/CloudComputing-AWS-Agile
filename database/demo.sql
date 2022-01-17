@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 11, 2022 at 04:22 PM
+-- Generation Time: Jan 17, 2022 at 05:56 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.26
 
@@ -26,6 +26,8 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `maplogin`
 --
+-- Creation: Jan 10, 2022 at 01:12 AM
+--
 
 CREATE TABLE `maplogin` (
   `id` int(11) NOT NULL,
@@ -43,13 +45,15 @@ CREATE TABLE `maplogin` (
 
 INSERT INTO `maplogin` (`id`, `full_name`, `email`, `password`, `token`, `status`, `photo`) VALUES
 (112, 'Musab developer', 'musabwebdev@gmail.com', 'bedebb62a1716ada5fa7203f46c02723', '0cb5e63a18e45aadc68a9e894d88618d', 1, '907182248Screenshot 2021-05-17 115128.png'),
-(113, 'MAP Agreement Partner 1', 'test@test.com', 'test', '534331a36506911a5eb873191820d918', 1, '1928310057Picture1.jpg'),
+(113, 'MAP Agreement Partner 1', 'test1@test.com', 'test1', '534331a36506911a5eb873191820d918', 1, '1928310057Picture1.jpg'),
 (114, 'kha', 'kha@kha.com', 'fcd88a44f6c2becd383aad3351736f14', 'b35c22a4427b38d3beaae761071af1b7', 1, '18513308853.png');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `mapservice`
+--
+-- Creation: Jan 16, 2022 at 01:31 PM
 --
 
 CREATE TABLE `mapservice` (
@@ -72,23 +76,86 @@ CREATE TABLE `mapservice` (
   `negotiateprice` int(10) NOT NULL,
   `created_by` varchar(255) NOT NULL,
   `question` varchar(2000) NOT NULL,
-  `response` varchar(2000) NOT NULL
+  `response` varchar(2000) NOT NULL,
+  `feedback` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `mapservice`
 --
 
-INSERT INTO `mapservice` (`globalid`, `profileid`, `employeeid`, `employeename`, `location`, `skilllevel`, `skillset`, `submission_status`, `bid_status`, `agreed_status`, `durationavailablefor`, `currentcompany`, `language`, `comments`, `profileuploadedon`, `price`, `negotiateprice`, `created_by`, `question`, `response`) VALUES
-(4847, 113, 0, '', 'sd', 2, 'hh', 1, 0, 0, 'i', 'MAP Agreement Partner 1', '', 'iu', '2022-01-10 17:25:15.645320', 10000, 0, 'Testy Test', '', ''),
-(2204, 114, 0, 'efre', 'er', 0, '3', 1, 0, 0, '', 'MAP Agreement Partner 1', 'ewr', '', '2022-01-11 07:23:58.723135', 0, 0, 'Testy Test', '', ''),
-(534239, 115, 9090, 'charu', '', 3, '', 2, 0, 0, '', 'MAP Agreement Partner 1', 'hhh', '', '2022-01-11 13:11:52.580053', 20000, 0, '', '', ''),
-(8080, 116, 9090, 'charu', '', 3, '', 2, 0, 0, '', 'MAP Agreement Partner 1', 'hhh', '', '2022-01-11 13:33:58.015455', 15000, 0, '', '', '');
+INSERT INTO `mapservice` (`globalid`, `profileid`, `employeeid`, `employeename`, `location`, `skilllevel`, `skillset`, `submission_status`, `bid_status`, `agreed_status`, `durationavailablefor`, `currentcompany`, `language`, `comments`, `profileuploadedon`, `price`, `negotiateprice`, `created_by`, `question`, `response`, `feedback`) VALUES
+(4847, 113, 0, '', 'sd', 2, 'hh', 5, 0, 1, 'i', 'MAP Agreement Partner 1', '', 'iu', '2022-01-10 17:25:15.645320', 10000, 0, 'Testy Test', 'third', '', ''),
+(2204, 114, 0, 'efre', 'er', 1, '3', 4, 0, 1, '', 'MAP Agreement Partner 1', 'ewr', '', '2022-01-11 07:23:58.723135', 849, 849, 'Testy Test', '', '', 'good fella'),
+(534239, 115, 9090, 'charu', '', 3, '', 2, 0, 0, '', 'MAP Agreement Partner 2', 'hhh', '', '2022-01-11 13:11:52.580053', 20000, 0, 'Testy Test', 'second question?', '', ''),
+(89, 121, 0, 'geoffrey', '', 3, '', 2, 0, 0, '', 'MAP Agreement Partner 1', 'game', 'of thrones', '2022-01-14 18:08:21.436134', 32, 0, 'Testy Test', 'Is winter coming?', 'no, tis not', ''),
+(8080, 122, 78, 'ere', '', 1, '', 4, 0, 0, '', 'MAP Agreement Partner 1', '', 'multiple profile', '2022-01-14 18:12:23.015145', 12000, 0, '', '', '', ''),
+(138986, 123, 78, 'erika', 'hamburg', 1, 'java', 2, 0, 0, '', 'MAP Agreement Partner 1', 'english, deutsch', 'colloborative', '2022-01-16 16:51:29.172166', 650, 0, '', '', '', ''),
+(1103, 125, 666, 'olu', '', 0, '', 2, 0, 0, '', 'MAP Agreement Partner 1', '', '', '2022-01-16 19:37:39.089960', 890, 0, 'Testy Test', '', '', ''),
+(8080, 126, 9010, 'rahul', 'india', 1, 'html', 2, 0, 0, '', 'MAP Agreement Partner 1', 'telugu', 'who', '2022-01-16 19:55:43.481694', 949, 0, 'Testy Test', '', '', ''),
+(8080, 127, 8989, 'j', '', 1, '', 2, 0, 0, '', 'MAP Agreement Partner 1', '', '', '2022-01-16 20:15:18.953134', 947, 0, 'Testy Test', '', '', ''),
+(8080, 128, 888, 'h', '', 1, '', 2, 0, 0, '', 'MAP Agreement Partner 1', '', '', '2022-01-16 20:26:16.778082', 851, 0, 'Testy Test', '', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `map_contracts`
+--
+-- Creation: Jan 15, 2022 at 06:22 PM
+--
+
+CREATE TABLE `map_contracts` (
+  `id` int(11) NOT NULL,
+  `role_name` varchar(255) DEFAULT NULL,
+  `map_username` varchar(100) DEFAULT NULL,
+  `cluster` varchar(45) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `skill_level` int(3) NOT NULL,
+  `aggrement_status` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `map_contracts`
+--
+
+INSERT INTO `map_contracts` (`id`, `role_name`, `map_username`, `cluster`, `price`, `skill_level`, `aggrement_status`, `created_at`) VALUES
+(1, 'software engineer', 'MAP Agreement Partner 1', '1', 950, 1, NULL, '2022-01-15 12:33:28'),
+(2, 'marketing', 'MAP Agreement Partner 1', '1', 1050, 1, NULL, '2022-01-15 12:33:28'),
+(3, 'Programmer', 'MAP Agreement Partner 1', '1', 850, 2, NULL, '2022-01-15 14:58:16'),
+(4, 'Security Expert', 'MAP Agreement Partner 1', '2', 850, 1, NULL, '2022-01-15 14:58:16'),
+(5, 'software engineer', 'MAP Agreement Partner 1', '2', 700, 1, NULL, '2022-01-15 12:33:28'),
+(6, 'software engineer', 'MAP Agreement Partner 1', '2', 820, 2, NULL, '2022-01-15 12:33:28');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roles`
+--
+-- Creation: Jan 15, 2022 at 11:38 AM
+--
+
+CREATE TABLE `roles` (
+  `role_id` int(11) NOT NULL,
+  `role_name` varchar(45) DEFAULT NULL,
+  `skill_level` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`role_id`, `role_name`, `skill_level`) VALUES
+(1, 'software engineer', '1'),
+(5, 'ds', '2'),
+(7, 'Programmer', '2');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `service_requests`
+--
+-- Creation: Jan 15, 2022 at 06:26 PM
 --
 
 CREATE TABLE `service_requests` (
@@ -109,25 +176,36 @@ CREATE TABLE `service_requests` (
   `created_at` timestamp(6) NULL DEFAULT NULL,
   `created_by` varchar(255) NOT NULL,
   `updated_at` timestamp(6) NOT NULL DEFAULT current_timestamp(6),
-  `Submission_status` int(3) DEFAULT NULL
+  `Submission_status` int(3) DEFAULT NULL,
+  `template_status` int(3) DEFAULT NULL,
+  `deadline` date NOT NULL DEFAULT current_timestamp(),
+  `deadline_new` date DEFAULT NULL,
+  `expired_status` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `service_requests`
 --
 
-INSERT INTO `service_requests` (`id`, `globalid`, `Created_by_userid`, `is_open_for_bidding`, `cycle`, `role`, `skilllevel`, `location`, `skillset`, `duration`, `projectname`, `taskdescription`, `comments`, `weight`, `created_at`, `created_by`, `updated_at`, `Submission_status`) VALUES
-(1000, 8879899, 0, 0, 1, 'Software Consultant', 2, 'Hamburg', 'Familiar with Agile workflow,HTML,CSS', '3 years', 'Deutsche-Bahn ticketing system', 'Must coordinate deliverables with team members', '', 'functional 100%', NULL, '', '2022-01-05 10:14:54.845689', NULL),
-(1001, 563434, 0, 0, 1, 'fgu', 2, 'fytfy', 'ghg', 'hh', 'yg', 'guh', '', 'hjh', NULL, '', '2022-01-05 12:26:56.306886', NULL),
-(1002, 138986, 0, 0, 1, 'Infrastructure Maintenance', 3, 'Munich', '', '3 months', 'CMRL', 'Need somebody with 3+ years of experience with Metro train infrastructure', '', 'Functional 80%', NULL, '', '2022-01-06 12:21:14.594320', NULL),
-(1003, 534239, 3, 1, 1, 'erer', 1, 'rrr', 'sr', 'erer', 'tht', 'erer', 'hrt', 'wee', '2022-01-08 05:49:52.000000', 'Testy test', '2022-01-08 05:49:52.880859', 1),
-(1004, 8080, 0, 1, 1, 'ds', 2, 'sd', 'hh', 'i', 'jn', 'ui', 'iu', 'u', '2022-01-10 09:57:59.000000', 'root', '2022-01-10 09:57:59.576251', 1),
-(1005, 2204, 3, 1, 1, 'Security Expert', 2, 'Chennai', 'Networking and Routing principles knowledge preferred', '10 months', 'CMRL', 'Maintain servers', 'Need experience with CISCO routers', '90% functional', '2022-01-10 17:32:45.000000', 'Testy Test', '2022-01-10 17:32:45.722300', 2);
+INSERT INTO `service_requests` (`id`, `globalid`, `Created_by_userid`, `is_open_for_bidding`, `cycle`, `role`, `skilllevel`, `location`, `skillset`, `duration`, `projectname`, `taskdescription`, `comments`, `weight`, `created_at`, `created_by`, `updated_at`, `Submission_status`, `template_status`, `deadline`, `deadline_new`, `expired_status`) VALUES
+(1000, 8879899, 0, 0, 1, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 1, NULL, '2022-03-21', NULL, 0),
+(1001, 563434, 0, 0, 1, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 1, NULL, '2022-03-21', NULL, 0),
+(1002, 138986, 0, 0, 2, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 1, NULL, '2022-03-21', '2022-04-20', 0),
+(1003, 4847, 3, 1, 1, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 3, NULL, '2022-03-21', NULL, 0),
+(1004, 8080, 0, 1, 1, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 2, NULL, '2022-03-21', NULL, 0),
+(1005, 2204, 3, 1, 1, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'cha', 'ayyo', 'r', '2022-01-16 15:29:48.000000', 'Testy Test', '2022-01-16 15:29:48.000000', 1, 1, '2022-03-22', NULL, 1),
+(1006, 2680, 3, 1, 1, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 1, NULL, '2022-03-21', '2022-03-20', 0),
+(1007, 2685, 3, 1, 1, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 1, NULL, '2022-03-21', NULL, 0),
+(1008, 1103, 3, 1, 2, 'software engineer', 2, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 2, NULL, '2022-03-21', NULL, 0),
+(1011, 3549, 3, 1, 1, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 1, 1, '2022-03-21', NULL, 0),
+(1012, 3128, 3, 1, 1, 'software engineer', 1, 'Munich', 'er', 'er', 'fgfgfg', 'you know what', 'i mean', 'r', '2022-01-16 15:24:40.000000', 'Testy Test', '2022-01-16 15:24:40.000000', 5, 0, '2022-03-21', NULL, 0);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `users`
+--
+-- Creation: Jan 03, 2022 at 12:57 PM
 --
 
 CREATE TABLE `users` (
@@ -166,6 +244,18 @@ ALTER TABLE `mapservice`
   ADD PRIMARY KEY (`profileid`);
 
 --
+-- Indexes for table `map_contracts`
+--
+ALTER TABLE `map_contracts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`role_id`);
+
+--
 -- Indexes for table `service_requests`
 --
 ALTER TABLE `service_requests`
@@ -191,13 +281,25 @@ ALTER TABLE `maplogin`
 -- AUTO_INCREMENT for table `mapservice`
 --
 ALTER TABLE `mapservice`
-  MODIFY `profileid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `profileid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+
+--
+-- AUTO_INCREMENT for table `map_contracts`
+--
+ALTER TABLE `map_contracts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `service_requests`
 --
 ALTER TABLE `service_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1006;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1013;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -209,68 +311,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-ALTER TABLE `service_requests` ADD `template_status` INT(3) NULL DEFAULT NULL AFTER `Submission_status`;
-
-ALTER TABLE `service_requests` ADD `negotiateprice` int(10) NOT NULL;
-
-ALTER TABLE `mapservice` ADD `feedback` varchar(200) NOT NULL;
-
-ALTER TABLE `service_requests` ADD `deadline` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `template_status`;
-
-ALTER TABLE `service_requests` ADD `deadline_new` DATE NULL DEFAULT NULL AFTER `deadline`;
-
-ALTER TABLE `service_requests` ADD `expired_status` INT NULL DEFAULT NULL AFTER `deadline_new`;
-
-ALTER TABLE `service_requests` ADD `role_id` INT NOT NULL AFTER `skilllevel`;
-
---
-
-DROP TABLE IF EXISTS `map_contracts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `map_contracts` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `role_id` int DEFAULT NULL,
-  `map_id` int DEFAULT NULL,
-  `cluster` varchar(45) DEFAULT NULL,
-  `price` int DEFAULT NULL,
-  `bid_status` int DEFAULT NULL,
-  `aggrement_status` int DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `created_by` int DEFAULT NULL,
-  `updated_by` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
---
-
-DROP TABLE IF EXISTS `roles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `roles` (
-  `role_id` int NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(45) DEFAULT NULL,
-  `skill_level` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
-
-INSERT INTO `roles` VALUES (1,'software engineer','1'),(6,'Programmer','1'),(7,'Programmer','2');
-
-ALTER TABLE `map_contracts` CHANGE `role_id` `role_name` VARCHAR(255) NULL;
-
-ALTER TABLE `map_contracts` CHANGE `map_id` `map_username` VARCHAR(100) NULL;
-
-ALTER TABLE `map_contracts` ADD `skill_level` INT(3) NOT NULL AFTER `price`;
-
-ALTER TABLE `map_contracts`
-  DROP `bid_status`,
-  DROP `updated_at`,
-  DROP `created_by`,
-  DROP `updated_by`;
-
-ALTER TABLE `service_requests` DROP `role_id`;
-
-ALTER TABLE `mapservice` ADD `feedback` VARCHAR(255) NOT NULL AFTER `response`;
