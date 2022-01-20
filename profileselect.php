@@ -13,7 +13,7 @@ $load = mysqli_query($conn, "SELECT * FROM users WHERE id='$userid' ");
 	$row = mysqli_fetch_assoc($load);
     	$usernamepre = $row['full_name'];
     	$username = mysqli_real_escape_string($conn, $usernamepre);	
-	echo '<script type="text/javascript"> alert("Username is '.$username.' ");</script>';
+	//echo '<script type="text/javascript"> alert("Username is '.$username.' ");</script>';
   } else {
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
@@ -47,6 +47,32 @@ if (isset($_POST["accept"])) {
    		            //echo "<script>alert('Profile selected');</script>";
   	            } else {
     		        echo "<script>alert('Selection not reflected in MAP Table');</script>";
+  	            }
+  	        } else {
+    		echo "<script>alert('The Application, for which this profile was uploaded for, has expired');</script>";
+  	        }
+  	} else {
+    		echo "<script>alert('Profile Status has changed ');</script>";
+  	}	
+}
+
+if (isset($_POST["reject"])) {
+
+  	$profileidr = mysqli_real_escape_string($conn, $_POST["profileidr"]);
+    $reason = mysqli_real_escape_string($conn, $_POST["reason"]);
+	$check = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid ='$profileidr' AND Submission_status = '2' ");
+	if (mysqli_num_rows($check)>0) {
+		    $row = mysqli_fetch_assoc($check);
+    		$globalid = $row['globalid'];
+            $expirycheck = mysqli_query($conn, "SELECT * FROM service_requests WHERE globalid ='$globalid' AND Submission_status = '2' AND expired_status = '0' ");
+	        if (mysqli_num_rows($expirycheck)>0) {
+                $sql2 = "UPDATE `mapservice` SET `submission_status` = '4', `comments` = '$reason' WHERE profileid = '$profileidr' ";
+                $result2 = mysqli_query($conn, $sql2);
+	            $verify2 = mysqli_query($conn, "SELECT * FROM mapservice WHERE profileid='$profileidr' AND submission_status = '4' AND comments = '$reason' ");
+	            if (mysqli_num_rows($verify2)>0) {
+   		            echo "<script>alert('Profile rejected');</script>";
+  	            } else {
+    		        echo "<script>alert('Update not reflected in MAP Table');</script>";
   	            }
   	        } else {
     		echo "<script>alert('The Application, for which this profile was uploaded for, has expired');</script>";
@@ -88,7 +114,7 @@ if (isset($_POST["accept"])) {
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '0' ";
+	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '0' AND submission_status = '2' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
@@ -158,6 +184,31 @@ if (isset($_POST["accept"])) {
                 </div>
             </div>
         </form>
+
+<h1>Decline Profile & Give Reasons</h1>
+	
+	<form class="form-container js-form-container" method="post">
+            <!-- No id should be same. Change / replace at all occurrences -->
+            <div class="form-inputs">
+                <div class="mb-3 row">
+                    <label for="profileidr" class="col-sm-2 col-form-label">Profile ID:</label>
+                    <div class="col-sm-10">
+                        <input id="profileidr" name="profileidr" class="form-control" type="text" placeholder="Profile ID to reject" value="<?php echo $_POST["profileidr"]; ?>" required />
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="reason" class="col-sm-2 col-form-label">Reason to decline / Evaluate offer:</label>
+                    <div class="col-sm-10">
+                        <input id="reason" name="reason" class="form-control" type="text" placeholder="Give description of reason" value="<?php echo $_POST["reason"]; ?>" required />
+                    </div>
+                </div>
+		    <div class="form-input-actions">                
+                    <div id="actionButtons">
+                        <input type="submit" class="btn" name="reject" value="Reject Profile" />
+                    </div>
+                </div>
+            </div>
+    </form>
 
 	<form class="form-container js-form-container" method="post">
            

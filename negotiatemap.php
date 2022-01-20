@@ -107,7 +107,7 @@ if (isset($_POST["negotiate"])) {
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE currentcompany = '$mapname' AND agreed_status = '0' AND NOT submission_status = '5' ";
+	$sql = "SELECT * FROM mapservice WHERE currentcompany = '$mapname' AND agreed_status = '0' AND submission_status = '2' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {	

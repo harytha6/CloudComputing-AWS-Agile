@@ -77,7 +77,7 @@ $load = mysqli_query($conn, "SELECT * FROM map_user WHERE map_id='$mapid' ");
   <th>Skill Level</th>
         <th>Duration available for</th>
         <th>Language </th>
-        <th>Comments</th>
+        <th>Comments from Consumer</th>
   <th>Offered Price </th>
   <th>Profile uploaded on </th>
   <th>Submission status </th>

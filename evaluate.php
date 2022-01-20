@@ -67,7 +67,7 @@ if (isset($_POST["accept"])) {
   </thead>
   <tbody>
    <?php
-	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '1' AND submission_status = '4' ";
+	$sql = "SELECT * FROM mapservice WHERE created_by = '$username' AND agreed_status = '1' AND submission_status = '3' ";
   	$result = $conn-> query($sql);
 
     if ($result-> num_rows > 0) {
