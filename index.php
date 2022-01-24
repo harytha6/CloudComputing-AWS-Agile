@@ -18,7 +18,7 @@ if (isset($_SESSION["map_id"])) {
 
 if (isset($_POST["signinmap"])) {
   $email = mysqli_real_escape_string($conn, $_POST["mapemail"]);
-  $password = mysqli_real_escape_string($conn, $_POST["mappassword"]);
+  $password = mysqli_real_escape_string($conn, md5($_POST["mappassword"]));
 
   $check_email = mysqli_query($conn, "SELECT * FROM map_user WHERE map_user_email='$email' AND password='$password'");
 

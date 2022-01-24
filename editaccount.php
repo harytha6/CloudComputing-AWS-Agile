@@ -25,7 +25,7 @@ if (isset($_POST["back"])) {
 if (isset($_POST["changeemail"])) {
     $oldemail = mysqli_real_escape_string($conn, $_POST["oldemail"]);
     $newemail = mysqli_real_escape_string($conn, $_POST["newemail"]);
-    $password = mysqli_real_escape_string($conn, $_POST["password"]);
+    $password = mysqli_real_escape_string($conn, md5($_POST["password"]));
 
     $verify = mysqli_query($conn, "SELECT * FROM map_user WHERE map_user_email ='$oldemail' AND password = '$password' ");
 	         if (mysqli_num_rows($verify)>0) {
@@ -45,9 +45,9 @@ if (isset($_POST["changeemail"])) {
 }
 if (isset($_POST["changepassword"])) {
     $email = mysqli_real_escape_string($conn, $_POST["email"]);
-    $oldpassword = mysqli_real_escape_string($conn, $_POST["password"]);
-    $newpassword = mysqli_real_escape_string($conn, $_POST["newpwd"]);
-    $repeatpassword = mysqli_real_escape_string($conn, $_POST["repwd"]);
+    $oldpassword = mysqli_real_escape_string($conn, md5($_POST["password"]));
+    $newpassword = mysqli_real_escape_string($conn, md5($_POST["newpwd"]));
+    $repeatpassword = mysqli_real_escape_string($conn, md5($_POST["repwd"]));
 
     $verify = mysqli_query($conn, "SELECT * FROM map_user WHERE map_user_email ='$email' AND password = '$oldpassword' ");
 	    if($newpassword==$repeatpassword){    
@@ -99,7 +99,7 @@ if (isset($_POST["changepassword"])) {
 		<div class="mb-3 row">
                     <label for="password" class="col-sm-2 col-form-label"> Enter Current Password:</label>
                     <div class="col-sm-10">
-                        <input id="password" name="password" class="form-control" type="text" placeholder="Verify change" value="<?php echo $_POST["password"]; ?>" required />
+                        <input type="password" ng-model="dataItem.password" id="password" name="password" class="form-control" type="text" placeholder="Verify change" value="<?php echo $_POST["password"]; ?>" required />
                     </div>
                 </div>
 		<div class="form-input-actions">                
@@ -124,19 +124,19 @@ if (isset($_POST["changepassword"])) {
                 <div class="mb-3 row">
                     <label for="password" class="col-sm-2 col-form-label"> Enter Old Password:</label>
                     <div class="col-sm-10">
-                        <input id="password" name="password" class="form-control" type="text" placeholder="Enter old password" value="<?php echo $_POST["password"]; ?>" required />
+                        <input type="password" ng-model="dataItem.password" id="password" name="password" class="form-control" type="text" placeholder="Enter old password" value="<?php echo $_POST["password"]; ?>" required />
                     </div>
                 </div>
 		        <div class="mb-3 row">
                     <label for="newpwd" class="col-sm-2 col-form-label"> New Password:</label>
                     <div class="col-sm-10">
-                        <input id="newpwd" name="newpwd" class="form-control" type="text" placeholder="Enter new password" value="<?php echo $_POST["newpwd"]; ?>" required />
+                        <input type="password" ng-model="dataItem.password" id="newpwd" name="newpwd" class="form-control" type="text" placeholder="Enter new password" value="<?php echo $_POST["newpwd"]; ?>" required />
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="repwd" class="col-sm-2 col-form-label"> Re-enter Password:</label>
                     <div class="col-sm-10">
-                        <input id="repwd" name="repwd" class="form-control" type="text" placeholder="Repeat password " value="<?php echo $_POST["repwd"]; ?>" required />
+                        <input type="password" ng-model="dataItem.password"  id="repwd" name="repwd" class="form-control" type="text" placeholder="Repeat password " value="<?php echo $_POST["repwd"]; ?>" required />
                     </div>
                 </div>
 		        <div class="form-input-actions">                

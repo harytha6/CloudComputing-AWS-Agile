@@ -17,23 +17,6 @@ $load = mysqli_query($conn, "SELECT * FROM map_user WHERE map_id='$mapid' ");
     echo "<script>alert('Loading profile details not complete.');</script>";
   }
 
-//update expired_status for first cycle
-$datesql = "SELECT * FROM service_requests WHERE deadline < cast(now() as date) ";
-$dateresult = $conn->query($datesql);
-		if ($dateresult->num_rows > 0) {
-			 while($row = $dateresult->fetch_assoc()) {
-				$row["expired_status"] = '1';
-			}			
-		}
- //update expired_status for second cycle
-$datesql2 = "SELECT * FROM service_requests WHERE deadline_new < cast(now() as date) ";
-$dateresult2 = $conn->query($datesql2);
-		if ($dateresult2->num_rows > 0) {
-			 while($row = $dateresult2->fetch_assoc()) {
-				$row["expired_status"] = '1';
-			}			
-		}
-
 if (isset($_POST["upload"])) {
 
   $globalid = mysqli_real_escape_string($conn, $_POST["globalid"]);
@@ -64,7 +47,7 @@ if (isset($_POST["upload"])) {
              if ($price <= $tempmaxprice){
 
 
-    $sql = "INSERT INTO mapservice (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments,price,employeeid,created_by) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapname','$language','$comments','$price','$employeeid','$consumername')";
+    $sql = "INSERT INTO mapservice (globalid, employeename, location, skilllevel, skillset, submission_status, bid_status, agreed_status, durationavailablefor, currentcompany, language, comments,price,employeeid,created_by,profileuploadedon) VALUES ('$globalid','$employeename', '$location', '$skilllevel','$skillset','2','0','0','$duration','$mapname','$language','$comments','$price','$employeeid','$consumername', current_timestamp)";
     $result = mysqli_query($conn, $sql);
     $check = mysqli_query($conn, "SELECT * FROM mapservice WHERE globalid ='$globalid' AND employeeid= '$employeeid' ");
 
@@ -261,8 +244,8 @@ if (isset($_POST["upload"])) {
             Hello, <?php echo $mapname ?>
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Messages</a></li>
+            <li><a class="dropdown-item" href="editaccount.php">Settings</a></li>
+            <li><a class="dropdown-item" href="refresh.php">Refresh Status</a></li>
             <li><a class="dropdown-item" class="nav-link" href="logout.php">Sign out</a></li>
           </ul>
         </div>
@@ -331,6 +314,12 @@ if (isset($_POST["upload"])) {
                             <a class="nav-link" href="editaccount.php">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                 <span class="ml-2"> Edit Own Account </span>
+                            </a>
+    			        </li>
+			<li class="nav-item">
+                            <a class="nav-link" href="createnewaccount.php">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                <span class="ml-2"> Create New Accounts for Login </span>
                             </a>
     			        </li>
                        </ul>
